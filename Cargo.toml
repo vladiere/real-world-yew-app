@@ -1,0 +1,13 @@
+[workspace]
+
+resolver = "2"
+
+members = [
+  "crates/owl-wasm",
+  "crates/owl-actix",
+  "crates/owl-actix/generate-db"
+, "crates/owl-socket"]
+
+[profile.release]
+lto = true
+opt-level = 'z'
