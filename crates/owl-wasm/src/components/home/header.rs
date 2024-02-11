@@ -2,14 +2,14 @@ use web_sys::{console, js_sys::JsString};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::{app::AppRoutes, hooks::use_user_context};
+use crate::{app::AppRoutes, services::get_access};
 
 #[function_component(Header)]
 pub fn header_view() -> Html {
-    let user_ctx = use_user_context();
-    if !user_ctx.is_authenticated() {
-        console::log_1(&JsString::from(format!("{}", user_ctx.access_token)));
-        return html! { <Redirect<AppRoutes> to={AppRoutes::Login} /> };
+    let navigator = use_navigator().unwrap();
+
+    if !get_access().is_some() {
+        navigator.push(&AppRoutes::Login);
     }
 
     html! {

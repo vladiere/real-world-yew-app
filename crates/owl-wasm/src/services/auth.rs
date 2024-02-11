@@ -1,14 +1,19 @@
 use web_sys::{console, js_sys::JsString};
 
-use super::{get_token, request_get, request_post, request_put};
+use super::{get_access, get_refresh, request_get, request_post, request_put};
 use crate::{error::Error, types::*};
 
 /// GET current admin info.
 pub async fn current() -> Result<AdminInfoWrapper, Error> {
-    if let Some(token) = get_token() {
-        console::log_1(&JsString::from(format!("{}", token)));
+    let mut admin_info = AdminInfo::default();
+    if let Some(access) = get_access() {
+        admin_info.access_token = access;
     }
-    request_get::<AdminInfoWrapper>("/admin/info".to_string()).await
+    if let Some(refresh) = get_refresh() {
+        admin_info.refresh_token = refresh;
+    }
+
+    Ok(AdminInfoWrapper { admin: admin_info })
 }
 
 /// Login a admin
@@ -25,6 +30,11 @@ pub async fn register_admin(
         register_info,
     )
     .await
+}
+
+/// Get the admin info
+pub async fn get_info_admin() -> Result<AdminRegisterInfoWrapper, Error> {
+    request_get::<AdminRegisterInfoWrapper>("/admin/info".to_string()).await
 }
 
 /// Save info of current admin

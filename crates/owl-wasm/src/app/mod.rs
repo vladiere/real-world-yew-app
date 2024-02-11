@@ -2,13 +2,16 @@
 
 pub mod editor;
 pub mod home;
+pub mod layouts;
 pub mod login;
+pub mod not_found;
 pub mod profile;
 pub mod register;
 
 use yew::prelude::*;
 use yew_router::prelude::*;
 
+use crate::app::layouts::SideLayout;
 use crate::components::user_context_provider::UserContextProvider;
 
 use login::Login;
@@ -24,10 +27,6 @@ pub enum AppRoutes {
     Home,
     #[at("/forgot-password")]
     ForgotPassword,
-    #[at("/monitoring")]
-    Monitoring,
-    #[at("/report")]
-    Report,
     #[at("/admin")]
     Admin,
     #[at("/404")]
@@ -45,6 +44,12 @@ pub enum AdminRoutes {
     AdminUpdate,
     #[at("/user")]
     User,
+    #[at("/profiling")]
+    Profiling,
+    #[at("/devices")]
+    Devices,
+    #[at("/monitoring")]
+    Monitoring,
 }
 
 /// User Routes
@@ -58,11 +63,13 @@ pub enum UserRoutes {
 
 pub fn switch_main(route: AppRoutes) -> Html {
     match route {
-        AppRoutes::Home => html! { <DashboardPage /> },
+        AppRoutes::Home => html! {
+            <SideLayout>
+                <DashboardPage />
+            </SideLayout>
+        },
         AppRoutes::Login => html! { <Login /> },
         AppRoutes::ForgotPassword => html! { "forgot password page" },
-        AppRoutes::Monitoring => html! { "monitoring page" },
-        AppRoutes::Report => html! { "report page" },
         AppRoutes::Admin => html! { <Switch<AdminRoutes> render={switch_admin} /> },
         AppRoutes::NotFound => html! { "404 | Not found" },
     }
@@ -73,6 +80,9 @@ pub fn switch_admin(route: AdminRoutes) -> Html {
         AdminRoutes::AdminPage => html! { "AdminPage" },
         AdminRoutes::AdminRegister => html! { "admin register" },
         AdminRoutes::AdminUpdate => html! { "admin update" },
+        AdminRoutes::Monitoring => html! { "monitoring page" },
+        AdminRoutes::Devices => html! { "devices" },
+        AdminRoutes::Profiling => html! { "profiling" },
         AdminRoutes::User => html! { <Switch<UserRoutes> render={switch_user} /> },
     }
 }

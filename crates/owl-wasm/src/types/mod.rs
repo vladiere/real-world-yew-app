@@ -2,6 +2,7 @@
 
 mod accounts;
 mod auth;
+mod errors;
 mod feedbacks;
 mod monitoring;
 mod profile;
@@ -17,6 +18,7 @@ pub use auth::{
     AdminInfo, AdminInfoWrapper, AdminRegisterInfo, AdminRegisterInfoWrapper, AdminUpdateInfo,
     AdminUpdateInfoWrapper, LoginInfo, LoginInfoWrapper, UserRegisterInfo, UserRegisterInfoWrapper,
 };
+pub use errors::AuthorizeErrors;
 pub use monitoring::{
     MonitoringInfo, MonitoringInfoWrapper, ViewMonitoringInfo, ViewMonitoringInfoWrapper,
 };

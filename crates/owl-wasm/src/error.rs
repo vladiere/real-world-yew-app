@@ -7,24 +7,24 @@ use thiserror::Error as ThisError;
 #[derive(ThisError, Clone, Debug, PartialEq, Eq)]
 pub enum Error {
     ///401
-    #[error("Unauthorized")]
-    Unauthorized,
+    #[error("{0}")]
+    Unauthorized(String),
 
     ///403
     #[error("Forbidden")]
     Forbidden,
 
     ///404
-    #[error("Not Found")]
-    NotFound,
+    #[error("{0}")]
+    NotFound(String),
 
     ///422
     #[error("Unprocessable Entity {0:?}")]
     UnprocessableEntity(ErrorInfo),
 
     ///500
-    #[error("Internal Server Error")]
-    InternalServerError,
+    #[error("{0}")]
+    InternalServerError(String),
 
     ///serde deserialize error
     #[error("Deserialize Error")]

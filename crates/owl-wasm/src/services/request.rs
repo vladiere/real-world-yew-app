@@ -6,16 +6,23 @@ use serde::{de::DeserializeOwned, Serialize};
 use web_sys::{console, js_sys::JsString};
 
 use crate::error::Error;
-use crate::types::ErrorInfo;
+use crate::types::{AuthorizeErrors, ErrorInfo};
 
 const API_ROOT: &str = dotenv!("API_ROOT");
-const TOKEN_KEY: &str = "owl-project.token";
+const TOKEN_ACCESS: &str = "access_token";
+const TOKEN_REFRESH: &str = "refresh_token";
 
 lazy_static! {
     ///JWT token read from local storage.
-    pub static ref TOKEN: RwLock<Option<String>> = {
-        if let Ok(token) = LocalStorage::get(TOKEN_KEY) {
-            console::log_1(&JsString::from(format!("{}",&token)));
+    pub static ref ACCESS_TOKEN: RwLock<Option<String>> = {
+        if let Ok(token) = LocalStorage::get(TOKEN_ACCESS) {
+            RwLock::new(Some(token))
+        } else {
+            RwLock::new(None)
+        }
+    };
+    pub static ref REFRESH_TOKEN: RwLock<Option<String>> = {
+        if let Ok(token) = LocalStorage::get(TOKEN_REFRESH) {
             RwLock::new(Some(token))
         } else {
             RwLock::new(None)
@@ -24,18 +31,24 @@ lazy_static! {
 }
 
 /// Set JWT token to local storage.
-pub fn set_token(token: Option<String>) {
-    if let Some(t) = token.clone() {
-        console::log_1(&JsString::from(format!("{}", t.clone())));
-        LocalStorage::set(TOKEN_KEY, t).expect("Failed to set token");
-    } else {
-        LocalStorage::delete(TOKEN_KEY);
+pub fn set_token(key: &str, token: Option<String>) {
+    if !key.is_empty() {
+        if let Some(t) = token.clone() {
+            LocalStorage::set(key, t).expect("Failed to set token");
+        } else {
+            LocalStorage::delete(key);
+        }
     }
 }
 
 /// Get JWT token from lazy_static.
-pub fn get_token() -> Option<String> {
-    let token_lock = TOKEN.read();
+pub fn get_access() -> Option<String> {
+    let token_lock = ACCESS_TOKEN.read();
+    token_lock.clone()
+}
+
+pub fn get_refresh() -> Option<String> {
+    let token_lock = REFRESH_TOKEN.read();
     token_lock.clone()
 }
 
@@ -51,7 +64,7 @@ where
         .request(method, url)
         .header("Content-Type", "application/json");
 
-    if let Some(token) = get_token() {
+    if let Some(token) = get_access() {
         builder = builder.bearer_auth(token);
     }
 
@@ -65,7 +78,6 @@ where
         if data.status().is_success() {
             let data: Result<T, _> = data.json::<T>().await;
             if let Ok(data) = data {
-                log::debug!("Response: {data:?}");
                 Ok(data)
             } else {
                 log::debug!("Response: {data:?}");
@@ -73,10 +85,31 @@ where
             }
         } else {
             match data.status().as_u16() {
-                401 => Err(Error::Unauthorized),
+                401 => {
+                    let data: Result<AuthorizeErrors, _> = data.json::<AuthorizeErrors>().await;
+                    if let Ok(data) = data {
+                        Err(Error::Unauthorized(data.message))
+                    } else {
+                        Err(Error::DeserializeError)
+                    }
+                }
                 403 => Err(Error::Forbidden),
-                404 => Err(Error::NotFound),
-                500 => Err(Error::InternalServerError),
+                404 => {
+                    let data: Result<AuthorizeErrors, _> = data.json::<AuthorizeErrors>().await;
+                    if let Ok(data) = data {
+                        Err(Error::NotFound(data.message))
+                    } else {
+                        Err(Error::DeserializeError)
+                    }
+                }
+                500 => {
+                    let data: Result<AuthorizeErrors, _> = data.json::<AuthorizeErrors>().await;
+                    if let Ok(data) = data {
+                        Err(Error::InternalServerError(data.message))
+                    } else {
+                        Err(Error::DeserializeError)
+                    }
+                }
                 422 => {
                     let data: Result<ErrorInfo, _> = data.json::<ErrorInfo>().await;
                     if let Ok(data) = data {

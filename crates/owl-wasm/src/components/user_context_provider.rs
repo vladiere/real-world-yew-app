@@ -1,11 +1,10 @@
 //! Admin context provider.
 
-use web_sys::{console, js_sys::JsString};
 use yew::prelude::*;
 use yew_hooks::prelude::*;
 
 use crate::error::Error;
-use crate::services::{auth::*, get_token, set_token};
+use crate::services::{auth::*, get_access, set_token};
 use crate::types::AdminInfo;
 
 #[derive(Properties, Clone, PartialEq)]
@@ -22,7 +21,7 @@ pub fn user_context_provider(props: &Props) -> Html {
     {
         let current_user = current_user.clone();
         use_mount(move || {
-            if get_token().is_some() {
+            if get_access().is_some() {
                 current_user.run();
             }
         });
@@ -37,7 +36,10 @@ pub fn user_context_provider(props: &Props) -> Html {
 
             if let Some(error) = &current_user.error {
                 match error {
-                    Error::Unauthorized | Error::Forbidden => set_token(None),
+                    Error::Unauthorized(_) | Error::Forbidden => {
+                        set_token("access_token", None);
+                        set_token("refresh_token", None);
+                    }
                     _ => (),
                 }
             }

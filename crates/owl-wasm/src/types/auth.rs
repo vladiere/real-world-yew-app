@@ -64,7 +64,7 @@ pub struct AdminInfo {
 
 impl AdminInfo {
     pub fn is_authenticated(&self) -> bool {
-        !&self.access_token.is_empty()
+        !&self.access_token.is_empty() && !&self.refresh_token.is_empty()
     }
 }
 
@@ -93,4 +93,26 @@ pub struct AdminUpdateInfo {
 #[serde(rename_all = "camelCase")]
 pub struct AdminUpdateInfoWrapper {
     pub admin: AdminUpdateInfo,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct CurrentAdminInfo {
+    pub id: i64,
+    pub firstname: String,
+    pub lastname: String,
+    pub middlename: String,
+    pub tower: String,
+    pub occupation: String,
+    pub position: String,
+    pub email_address: String,
+    pub contact_number: String,
+    pub username: String,
+    pub role_user: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct CurrentAdminInfoWrapper {
+    pub admin: CurrentAdminInfo,
 }

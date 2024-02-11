@@ -17,7 +17,8 @@ pub struct UseUserContextHandle {
 impl UseUserContextHandle {
     pub fn login(&self, value: AdminInfo) {
         // Set global token after logged in
-        set_token(Some(value.access_token.clone()));
+        set_token("access_token", Some(value.access_token.clone()));
+        set_token("refresh_token", Some(value.refresh_token.clone()));
         self.inner.set(value);
         // Redirect to home page
         self.navigator.push(&AppRoutes::Home);
@@ -25,7 +26,8 @@ impl UseUserContextHandle {
 
     pub fn logout(&self) {
         // Clear global token after logged out
-        set_token(None);
+        set_token("access_token", None);
+        set_token("refresh_token", None);
         self.inner.set(AdminInfo::default());
         // Redirect to home page
         self.navigator.push(&AppRoutes::Login);
