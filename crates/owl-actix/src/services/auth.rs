@@ -156,7 +156,7 @@ pub async fn login_admin(state: Data<AppState>, credentials: Json<LoginAdmin>) -
                             message: "Username does not exist".to_string(),
                             status: 404,
                         };
-                        HttpResponse::InternalServerError().json(err_msg)
+                        HttpResponse::NotFound().json(err_msg)
                     }
                 }
             } else {

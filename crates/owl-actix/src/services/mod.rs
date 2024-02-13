@@ -82,12 +82,14 @@ pub struct ResponseToken {
 }
 
 #[derive(Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct ErrorStatus {
     pub message: String,
     pub status: u32,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct LogoutInfo {
     pub refresh_token: String,
     pub username: String,

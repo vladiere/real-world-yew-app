@@ -34,4 +34,3 @@ derive_more = { version = "0.99.17", features = ["from", "display"] }
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 uuid = { version = "1.6.1", features = ["v4", "fast-rng", "serde"] }
-

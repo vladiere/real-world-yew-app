@@ -12,12 +12,12 @@
 -- # For MySQL
 
 -- Terminate connections and drop database/user
-SELECT CONCAT('KILL ', id, ';') 
-FROM information_schema.processlist 
-WHERE user = 'owl_dev' OR db = 'owl_db';
-
--- Pause for a moment to allow time for connections to be terminated
-DO GET_LOCK('pause_for_connections', 10);
+-- SELECT CONCAT('KILL ', id, ';') 
+-- FROM information_schema.processlist 
+-- WHERE user = 'owl_dev' OR db = 'owl_db';
+--
+-- -- Pause for a moment to allow time for connections to be terminated
+-- DO GET_LOCK('pause_for_connections', 10);
 
 DROP DATABASE IF EXISTS owl_db;
 DROP USER IF EXISTS 'owl_dev';
