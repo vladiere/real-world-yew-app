@@ -42,13 +42,12 @@ pub fn login_page() -> Html {
 
     let onsubmit = {
         let user_login = user_login.clone();
-        let btn_state = btn_state.clone();
         Callback::from(move |e: SubmitEvent| {
             e.prevent_default(); /* Prevent event propagation */
-            btn_state.set(true);
             user_login.run();
         })
     };
+
     let oninput_username = {
         let login_info = login_info.clone();
         Callback::from(move |e: InputEvent| {
@@ -58,6 +57,7 @@ pub fn login_page() -> Html {
             login_info.set(info);
         })
     };
+
     let oninput_password = {
         let login_info = login_info.clone();
         Callback::from(move |e: InputEvent| {

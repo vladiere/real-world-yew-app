@@ -13,7 +13,7 @@ pub fn header_view() -> Html {
     }
 
     html! {
-        <div class="w-full flex flex-row items-center justify-center py-3">
+        <div class="w-full flex flex-row items-center justify-center py-3 border-b-2 border-slate-400">
             <div class="flex-auto items-center justify-end w-[60%] flex flex-row gap-2">
                 <img src="public/images/owl-logo.png" class="w-[10%] h-[5%]" alt="OWL logo" />
                 <h1 class="text-2xl font-medium uppercase">{ "owl web server" }</h1>
