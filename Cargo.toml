@@ -5,6 +5,7 @@ resolver = "2"
 members = [
   "crates/owl-wasm",
   "crates/owl-actix",
+  "crates/owl-tauri",
   "crates/owl-actix/generate-db"
 , "crates/owl-socket"]
 

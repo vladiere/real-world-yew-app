@@ -17,13 +17,9 @@ pub struct LoginInfoWrapper {
 #[serde(rename_all = "camelCase")]
 pub struct AdminRegisterInfo {
     pub firstname: String,
-    pub lastname: String,
     pub middlename: String,
-    pub tower: String,
-    pub occupation: String,
-    pub position: String,
+    pub lastname: String,
     pub email_address: String,
-    pub contact_number: String,
     pub username: String,
     pub password: String,
 }
@@ -42,9 +38,7 @@ pub struct UserRegisterInfo {
     pub lastname: String,
     pub middlename: String,
     pub tower: String,
-    pub unit: String,
-    pub occupation: String,
-    pub position: String,
+    pub pack: String,
     pub email_address: String,
     pub contact_number: String,
 }
@@ -77,14 +71,7 @@ pub struct AdminInfoWrapper {
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct AdminUpdateInfo {
-    pub firstname: String,
-    pub lastname: String,
-    pub middlename: String,
-    pub tower: String,
-    pub occupation: String,
-    pub position: String,
     pub email_address: String,
-    pub contact_number: String,
     pub username: String,
     pub password: String,
 }
@@ -102,17 +89,33 @@ pub struct CurrentAdminInfo {
     pub firstname: String,
     pub lastname: String,
     pub middlename: String,
-    pub tower: String,
-    pub occupation: String,
-    pub position: String,
     pub email_address: String,
-    pub contact_number: String,
     pub username: String,
     pub role_user: String,
+    pub access_token: String,
+    pub refresh_token: String,
+}
+
+impl CurrentAdminInfo {
+    pub fn is_authenticated(&self) -> bool {
+        !&self.access_token.is_empty()
+    }
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CurrentAdminInfoWrapper {
     pub admin: CurrentAdminInfo,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug, Default)]
+pub struct LogoutInfo {
+    pub refresh_token: String,
+    pub username: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct LogoutInfoWrapper {
+    pub admin: LogoutInfo,
 }

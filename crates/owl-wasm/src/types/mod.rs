@@ -16,7 +16,8 @@ pub use accounts::{
 };
 pub use auth::{
     AdminInfo, AdminInfoWrapper, AdminRegisterInfo, AdminRegisterInfoWrapper, AdminUpdateInfo,
-    AdminUpdateInfoWrapper, LoginInfo, LoginInfoWrapper, UserRegisterInfo, UserRegisterInfoWrapper,
+    AdminUpdateInfoWrapper, CurrentAdminInfo, CurrentAdminInfoWrapper, LoginInfo, LoginInfoWrapper,
+    LogoutInfo, LogoutInfoWrapper, UserRegisterInfo, UserRegisterInfoWrapper,
 };
 pub use errors::AuthorizeErrors;
 pub use monitoring::{

@@ -5,7 +5,7 @@ use yew_hooks::prelude::*;
 
 use crate::error::Error;
 use crate::services::{auth::*, get_access, set_token};
-use crate::types::AdminInfo;
+use crate::types::CurrentAdminInfo;
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
@@ -15,7 +15,7 @@ pub struct Props {
 /// Admin context provider.
 #[function_component(UserContextProvider)]
 pub fn user_context_provider(props: &Props) -> Html {
-    let user_ctx = use_state(AdminInfo::default);
+    let user_ctx = use_state(CurrentAdminInfo::default);
     let current_user = use_async(async move { current().await });
 
     {
@@ -48,8 +48,8 @@ pub fn user_context_provider(props: &Props) -> Html {
     }
 
     html! {
-        <ContextProvider<UseStateHandle<AdminInfo>> context={user_ctx}>
+        <ContextProvider<UseStateHandle<CurrentAdminInfo>> context={user_ctx}>
             { for props.children.iter() }
-        </ContextProvider<UseStateHandle<AdminInfo>>>
+        </ContextProvider<UseStateHandle<CurrentAdminInfo>>>
     }
 }

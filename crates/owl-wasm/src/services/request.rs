@@ -39,6 +39,13 @@ pub fn set_token(key: &str, token: Option<String>) {
             LocalStorage::delete(key);
         }
     }
+    if key == "access_token" {
+        let mut access_token_lock = ACCESS_TOKEN.write();
+        *access_token_lock = token;
+    } else if key == "refresh_token" {
+        let mut refresh_token_lock = REFRESH_TOKEN.write();
+        *refresh_token_lock = token;
+    }
 }
 
 /// Get JWT token from lazy_static.

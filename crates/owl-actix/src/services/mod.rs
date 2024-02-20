@@ -6,8 +6,6 @@ pub mod extract_token;
 pub use auth::*;
 use serde::{Deserialize, Serialize};
 use sqlx::{mysql::MySqlRow, FromRow, Row};
-use tracing::debug;
-use uuid::Uuid;
 
 #[derive(Debug, PartialEq, Eq, Deserialize, sqlx::Type, Serialize, Clone)]
 #[sqlx(type_name = "user_type")]
@@ -22,7 +20,7 @@ pub struct AuthAdmin {
     id: i64,
     username: String,
     password: String,
-    token_salt: Option<Uuid>,
+    token_salt: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -36,11 +34,7 @@ pub struct RegisterAdminBody {
     pub firstname: String,
     pub middlename: String,
     pub lastname: String,
-    pub tower: String,
-    pub occupation: String,
-    pub position: String,
     pub email_address: String,
-    pub contact_number: String,
     pub username: String,
     pub password: String,
 }
@@ -82,17 +76,21 @@ pub struct ResponseToken {
 }
 
 #[derive(Serialize, Debug)]
-#[serde(rename_all = "camelCase")]
 pub struct ErrorStatus {
     pub message: String,
     pub status: u32,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
-#[serde(rename_all = "camelCase")]
 pub struct LogoutInfo {
     pub refresh_token: String,
     pub username: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct LogoutInfoWrapper {
+    pub admin: LogoutInfo,
 }
 
 #[derive(Serialize, FromRow)]

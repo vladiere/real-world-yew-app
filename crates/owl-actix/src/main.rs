@@ -5,7 +5,10 @@ use actix_web::{
     App, HttpServer, Responder,
 };
 use actix_web_httpauth::middleware::HttpAuthentication;
-use owl_actix::{login_admin, logout_admin, register_admin, server_config, validator, AppState};
+use owl_actix::{
+    admin::admin_info::get_admin_info, login_admin, logout_admin, register_admin, server_config,
+    validator, AdminContextExtractor, AppState,
+};
 use sqlx::mysql::MySqlPoolOptions;
 use tracing::info;
 use tracing_subscriber::EnvFilter;
@@ -38,6 +41,7 @@ async fn main() -> std::io::Result<()> {
 
         App::new()
             .app_data(Data::new(AppState { db: pool.clone() }))
+            .app_data(Data::new(AdminContextExtractor))
             .service(
                 web::scope("/api").service(greet).service(
                     web::scope("/admin")
@@ -47,7 +51,8 @@ async fn main() -> std::io::Result<()> {
                             web::scope("")
                                 .wrap(bearer_middleware)
                                 .service(auth_get)
-                                .service(logout_admin),
+                                .service(logout_admin)
+                                .service(get_admin_info),
                         ),
                 ),
             )

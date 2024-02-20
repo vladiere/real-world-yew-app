@@ -13,12 +13,11 @@ use tracing::debug;
 use uuid::Uuid;
 
 use crate::{
-    appstate::AppState, server_config, AdminNoPassword, AuthAdmin, LogoutInfo, LogoutInfoId,
-    QueryReturnMessage, RoleUser,
+    admin::{CurrentAdminInfo, CurrentAdminInfoWithToken, CurrentAdminInfoWrapper},
+    appstate::AppState,
+    server_config, AuthAdmin, LogoutInfoId, LogoutInfoWrapper, QueryReturnMessage, RoleUser,
 };
-use crate::{
-    middleware::TokenClaims, ErrorStatus, LoginAdmin, RegisterAdminBody, ResponseToken, TokenSet,
-};
+use crate::{middleware::TokenClaims, ErrorStatus, LoginAdmin, RegisterAdminBody};
 
 #[post("/register")]
 pub async fn register_admin(
@@ -26,7 +25,7 @@ pub async fn register_admin(
     body: Json<RegisterAdminBody>,
 ) -> impl Responder {
     let user: RegisterAdminBody = body.into_inner();
-    let query = "CALL create_user_or_admin(?,?,?,?,?,?,?,?,?,?,?,?);";
+    let query = "CALL create_user_or_admin(?,?,?,?,?,?,?,?);";
 
     debug!("{:<12} - register_admin: {}", user.username, "ATTEMPTING");
 
@@ -41,15 +40,11 @@ pub async fn register_admin(
         .bind(user.firstname)
         .bind(user.middlename)
         .bind(user.lastname)
-        .bind(user.tower)
-        .bind(user.occupation)
-        .bind(user.position)
         .bind(user.email_address)
-        .bind(user.contact_number)
         .bind(user.username)
         .bind(hash)
-        .bind(Uuid::new_v4())
-        .bind(Uuid::new_v4())
+        .bind(Uuid::new_v4().to_string())
+        .bind(Uuid::new_v4().to_string())
         .execute(&state.db)
         .await
     {
@@ -71,6 +66,7 @@ pub async fn login_admin(state: Data<AppState>, credentials: Json<LoginAdmin>) -
     let query = "SELECT id, username, password, token_salt from user_login WHERE username = ?";
     let query2 = "SELECT role_user FROM user_info WHERE id = ?";
     let query3 = "INSERT INTO refresh_token (username,refresh_token) VALUES (?,?)";
+    let query4 = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from user_info_details where id = ?";
 
     let jwt_secret: Hmac<Sha256> =
         Hmac::new_from_slice(&server_config().JWT_SECRET.as_bytes()).unwrap();
@@ -111,27 +107,49 @@ pub async fn login_admin(state: Data<AppState>, credentials: Json<LoginAdmin>) -
                                         role_user: res.role_user,
                                     };
 
-                                    let token_set = TokenSet {
-                                        access_token: claims
-                                            .clone()
-                                            .sign_with_key(&jwt_secret)
-                                            .unwrap(),
-                                        refresh_token: claims.sign_with_key(&jwt_secret).unwrap(),
-                                    };
-                                    let token_str = ResponseToken { admin: token_set };
-
-                                    match sqlx::query(query3)
-                                        .bind(username)
-                                        .bind(token_str.admin.refresh_token.clone())
-                                        .execute(&state.db)
+                                    match sqlx::query_as::<_, CurrentAdminInfo>(query4)
+                                        .bind(user.id)
+                                        .fetch_one(&state.db)
                                         .await
                                     {
-                                        Ok(_) => HttpResponse::Ok().json(token_str),
+                                        Ok(admin) => {
+                                            let current_admin_with_token =
+                                                CurrentAdminInfoWithToken {
+                                                    id: admin.id,
+                                                    firstname: admin.firstname,
+                                                    lastname: admin.lastname,
+                                                    middlename: admin.middlename,
+                                                    email_address: admin.email_address,
+                                                    username: admin.username,
+                                                    role_user: admin.role_user,
+                                                    access_token: claims
+                                                        .clone()
+                                                        .sign_with_key(&jwt_secret)
+                                                        .unwrap(),
+                                                    refresh_token: claims
+                                                        .sign_with_key(&jwt_secret)
+                                                        .unwrap(),
+                                                };
+
+                                            let current_admin = CurrentAdminInfoWrapper {
+                                                admin: current_admin_with_token,
+                                            };
+                                            match sqlx::query(query3)
+                                                .bind(username)
+                                                .bind(current_admin.admin.refresh_token.clone())
+                                                .execute(&state.db)
+                                                .await
+                                            {
+                                                Ok(_) => HttpResponse::Ok().json(current_admin),
+                                                Err(error) => {
+                                                    debug!( "{:<12} - query3 inserting token: {error:?}", "ERROR");
+                                                    HttpResponse::InternalServerError()
+                                                        .json(format!("{error:?}"))
+                                                }
+                                            }
+                                        }
                                         Err(error) => {
-                                            debug!(
-                                                "{:<12} - query3 inserting token: {error:?}",
-                                                "ERROR"
-                                            );
+                                            debug!("{:<12} - query3 error {error:?}", "ERROR");
                                             HttpResponse::InternalServerError()
                                                 .json(format!("{error:?}"))
                                         }
@@ -168,14 +186,14 @@ pub async fn login_admin(state: Data<AppState>, credentials: Json<LoginAdmin>) -
             }
         } else {
             let error = ErrorStatus {
-                message: String::from("Email address is required"),
+                message: String::from("Username is required"),
                 status: 401,
             };
             HttpResponse::Unauthorized().json(error)
         }
     } else {
         let error = ErrorStatus {
-            message: String::from("Email address and password are required"),
+            message: String::from("Username and Password are required"),
             status: 401,
         };
         HttpResponse::Unauthorized().json(error)
@@ -183,14 +201,14 @@ pub async fn login_admin(state: Data<AppState>, credentials: Json<LoginAdmin>) -
 }
 
 #[post("/logout")]
-pub async fn logout_admin(state: Data<AppState>, cred: Json<LogoutInfo>) -> impl Responder {
-    let creds: LogoutInfo = cred.into_inner();
-    let query1 = "select id from refresh_token where refresh_token = $1 order by id desc limit 1";
-    let query2 = "delete from refresh_token where username = $1";
+pub async fn logout_admin(state: Data<AppState>, cred: Json<LogoutInfoWrapper>) -> impl Responder {
+    let creds: LogoutInfoWrapper = cred.into_inner();
+    let query1 = "select id from refresh_token where refresh_token = ? order by id desc limit 1";
+    let query2 = "delete from refresh_token where username = ?";
 
-    debug!("{:<12} - logging out {}", creds.username, "LOGOUT");
+    debug!("{:<12} - logging out {}", creds.admin.username, "LOGOUT");
 
-    if creds.username.is_empty() && creds.refresh_token.is_empty() {
+    if creds.admin.username.is_empty() && creds.admin.refresh_token.is_empty() {
         let error = ErrorStatus {
             message: "Username and refresh_token is not set".to_string(),
             status: 401,
@@ -198,13 +216,13 @@ pub async fn logout_admin(state: Data<AppState>, cred: Json<LogoutInfo>) -> impl
         HttpResponse::Forbidden().json(error)
     } else {
         match sqlx::query_as::<_, LogoutInfoId>(query1)
-            .bind(creds.refresh_token)
+            .bind(creds.admin.refresh_token)
             .fetch_one(&state.db)
             .await
         {
             Ok(_) => {
                 match sqlx::query(query2)
-                    .bind(creds.username)
+                    .bind(creds.admin.username)
                     .execute(&state.db)
                     .await
                 {

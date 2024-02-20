@@ -6,16 +6,16 @@ use yew_router::prelude::*;
 
 use crate::app::AppRoutes;
 use crate::services::set_token;
-use crate::types::AdminInfo;
+use crate::types::CurrentAdminInfo;
 
 /// State handle for the [`use_user_context`] hook.
 pub struct UseUserContextHandle {
-    inner: UseStateHandle<AdminInfo>,
+    inner: UseStateHandle<CurrentAdminInfo>,
     navigator: Navigator,
 }
 
 impl UseUserContextHandle {
-    pub fn login(&self, value: AdminInfo) {
+    pub fn login(&self, value: CurrentAdminInfo) {
         // Set global token after logged in
         set_token("access_token", Some(value.access_token.clone()));
         set_token("refresh_token", Some(value.refresh_token.clone()));
@@ -28,14 +28,14 @@ impl UseUserContextHandle {
         // Clear global token after logged out
         set_token("access_token", None);
         set_token("refresh_token", None);
-        self.inner.set(AdminInfo::default());
+        self.inner.set(CurrentAdminInfo::default());
         // Redirect to home page
         self.navigator.push(&AppRoutes::Login);
     }
 }
 
 impl Deref for UseUserContextHandle {
-    type Target = AdminInfo;
+    type Target = CurrentAdminInfo;
 
     fn deref(&self) -> &Self::Target {
         &self.inner
@@ -68,7 +68,7 @@ impl fmt::Debug for UseUserContextHandle {
 /// This hook is used to manage user context.
 #[hook]
 pub fn use_user_context() -> UseUserContextHandle {
-    let inner = use_context::<UseStateHandle<AdminInfo>>().unwrap();
+    let inner = use_context::<UseStateHandle<CurrentAdminInfo>>().unwrap();
     let navigator = use_navigator().unwrap();
 
     UseUserContextHandle { inner, navigator }
