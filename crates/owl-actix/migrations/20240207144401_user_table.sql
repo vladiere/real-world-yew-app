@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS feedbacks;
 -- Create user_info table
 CREATE TABLE user_info (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  role_user ENUM('Admin', 'Super') NOT NULL DEFAULT 'Admin',
+  role_user ENUM('Admin', 'Super', 'User') NOT NULL DEFAULT 'Admin',
   firstname VARCHAR(255) NOT NULL,
   middlename VARCHAR(255) NOT NULL,
   lastname VARCHAR(255) NOT NULL,

@@ -78,6 +78,9 @@ pub fn login_page() -> Html {
             </div>
             <div class="w-full bg-gray-100 lg:w-2/6 flex items-center justify-center dark:bg-gray-900 dark:text-white">
                 <div class="max-w-md w-full p-6">
+                    <div class="w-full flex items-center justify-center">
+                        <img src="public/images/owl-logo.png" class="w-[30%]" alt="owl logo" />
+                    </div>
                     <h1 class="text-3xl font-semibold mb-6 text-center">{ "Signin to OWL" }</h1>
                     <ListErrors error={user_login.error.clone()} />
                     <form class="space-y-4" {onsubmit}>

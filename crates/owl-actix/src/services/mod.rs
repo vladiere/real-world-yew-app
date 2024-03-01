@@ -35,6 +35,7 @@ pub struct RegisterAdminBody {
     pub middlename: String,
     pub lastname: String,
     pub email_address: String,
+    pub role_user: String,
     pub username: String,
     pub password: String,
 }
@@ -99,6 +100,7 @@ pub struct LogoutInfoId {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct QueryReturnMessage {
     pub message: String,
 }

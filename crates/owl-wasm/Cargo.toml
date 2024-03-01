@@ -48,6 +48,7 @@ features = [
   "FontAwesomeSolidUsersGear",
   "BootstrapArrowRightCircle",
   "HeroiconsMiniSolidCog8Tooth",
+  "LucideLogOut",
 ]
 
 [dev-dependencies]

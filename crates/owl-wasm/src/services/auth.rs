@@ -18,8 +18,8 @@ pub async fn login(login_info: LoginInfoWrapper) -> Result<CurrentAdminInfoWrapp
 /// Register a new admin
 pub async fn register_admin(
     register_info: AdminRegisterInfoWrapper,
-) -> Result<AdminInfoWrapper, Error> {
-    request_post::<AdminRegisterInfoWrapper, AdminInfoWrapper>(
+) -> Result<QueryReturnMessage, Error> {
+    request_post::<AdminRegisterInfoWrapper, QueryReturnMessage>(
         "/admin/register".to_string(),
         register_info,
     )
@@ -27,8 +27,8 @@ pub async fn register_admin(
 }
 
 /// Logout current admin
-pub async fn logout_admin(admin_info: LogoutInfoWrapper) -> Result<LogoutInfoWrapper, Error> {
-    request_post::<LogoutInfoWrapper, LogoutInfoWrapper>("/admin/logout".to_string(), admin_info)
+pub async fn logout_admin(admin_info: LogoutInfoWrapper) -> Result<QueryReturnMessage, Error> {
+    request_post::<LogoutInfoWrapper, QueryReturnMessage>("/admin/logout".to_string(), admin_info)
         .await
 }
 

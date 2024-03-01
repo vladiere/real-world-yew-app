@@ -20,6 +20,7 @@ pub struct AdminRegisterInfo {
     pub middlename: String,
     pub lastname: String,
     pub email_address: String,
+    pub role_user: String,
     pub username: String,
     pub password: String,
 }
@@ -108,14 +109,20 @@ pub struct CurrentAdminInfoWrapper {
     pub admin: CurrentAdminInfo,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default, PartialEq, Eq)]
 pub struct LogoutInfo {
     pub refresh_token: String,
     pub username: String,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct LogoutInfoWrapper {
     pub admin: LogoutInfo,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct QueryReturnMessage {
+    pub message: String,
 }

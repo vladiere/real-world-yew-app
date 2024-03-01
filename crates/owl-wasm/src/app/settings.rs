@@ -8,7 +8,7 @@ use crate::{
     app::AppRoutes,
     hooks::use_user_context,
     services::{auth::*, get_refresh},
-    types::{AdminUpdateInfo, LogoutInfo, LogoutInfoWrapper},
+    types::{AdminUpdateInfo, AdminUpdateInfoWrapper, LogoutInfo, LogoutInfoWrapper},
 };
 
 #[function_component(SettingsPage)]
@@ -21,6 +21,20 @@ pub fn settings() -> Html {
     if !user_ctx.is_authenticated() {
         navigator.push(&AppRoutes::Login);
     }
+
+    let admin_update = {
+        let update_admin = update_admin.clone();
+        let password = confirm_password.clone();
+        use_async(async move {
+            let mut request = AdminUpdateInfoWrapper {
+                admin: (*update_admin).clone(),
+            };
+            if !(*password).is_empty() {
+                request.admin.password = (*password).clone();
+            }
+            save(request).await
+        })
+    };
 
     let oninput_email = {
         let update_admin = update_admin.clone();
@@ -70,11 +84,11 @@ pub fn settings() -> Html {
             <form>
                 <div class="mb-6">
                     <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "Admin username" }</label>
-                    <input type="text" id="username" class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="admin123" required=true value={update_admin.username.clone()} oninput={oninput_username} />
+                    <input type="text" id="username" class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="e.g. admin123" required=true value={update_admin.username.clone()} oninput={oninput_username} />
                 </div>
                 <div class="mb-6">
                     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "Email address" }</label>
-                    <input type="email" id="email" class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required=true value={update_admin.email_address.clone()} oninput={oninput_email}/>
+                    <input type="email" id="email" class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="e.g. john.doe@company.com" required=true value={update_admin.email_address.clone()} oninput={oninput_email}/>
                 </div>
                 <div class="mb-6">
                     <label for="password" class={

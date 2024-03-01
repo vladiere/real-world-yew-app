@@ -21,6 +21,8 @@ use login::Login;
 use self::forgot_password::ForgotPassword;
 use self::home::admins::AdminsPage;
 use self::home::dashboard::DashboardPage;
+use self::home::device_add::DeviceAdd;
+use self::home::device_update::DeviceUpdate;
 use self::home::devices::DevicesPage;
 use self::home::monitoring::MonitoringPage;
 use self::home::register_admin::RegisterAdmin;
@@ -40,30 +42,52 @@ pub enum AppRoutes {
     Home,
     #[at("/forgot-password")]
     ForgotPassword,
-    #[at("/users")]
-    Users,
     #[at("/devices")]
+    DevicesRoot,
+    #[at("/devices/*")]
     Devices,
     #[at("/monitoring")]
     Monitoring,
     #[at("/settings")]
     Settings,
     #[at("/admins")]
+    AdminsRoot,
+    #[at("/admins/*")]
     Admins,
+    #[at("/users")]
+    UsersRoot,
+    #[at("/users/*")]
+    Users,
+    #[not_found]
     #[at("/404")]
+    NotFound,
+}
+
+/// Device Routes
+#[derive(Routable, Debug, Clone, PartialEq, Eq)]
+pub enum DeviceRoutes {
+    #[at("/devices")]
+    DevicesList,
+    #[at("/devices/add")]
+    DeviceRegister,
+    #[at("/admins/update")]
+    DeviceUpdate,
+    #[not_found]
+    #[at("/devices/404")]
     NotFound,
 }
 
 /// Admin Routes
 #[derive(Routable, Debug, Clone, PartialEq, Eq)]
 pub enum AdminRoutes {
-    #[at("/register")]
-    AdminRegister,
-    #[at("/update")]
-    AdminUpdate,
     #[at("/admins")]
-    Admins,
-    #[at("/404")]
+    AdminsList,
+    #[at("/admins/register")]
+    AdminRegister,
+    #[at("/admins/update")]
+    AdminUpdate,
+    #[not_found]
+    #[at("/admins/404")]
     NotFound,
 }
 
@@ -71,84 +95,132 @@ pub enum AdminRoutes {
 #[derive(Routable, Debug, Clone, PartialEq, Eq)]
 pub enum UserRoutes {
     #[at("/users")]
-    Users,
-    #[at("/register")]
+    UsersList,
+    #[at("/users/register")]
     UserRegister,
-    #[at("/update")]
+    #[at("/users/update")]
     UserUpdate,
-    #[at("/404")]
+    #[not_found]
+    #[at("/users/404")]
     NotFound,
 }
 
-pub fn switch_main(route: AppRoutes) -> Html {
+fn switch_main(route: AppRoutes) -> Html {
     match route {
         AppRoutes::Home => html! {
             <SideLayout>
-                <DashboardPage />
+                <div class="h-full overflow-scroll">
+                    <DashboardPage />
+                </div>
             </SideLayout>
         },
         AppRoutes::Login => html! { <Login /> },
         AppRoutes::ForgotPassword => html! { <ForgotPassword /> },
         AppRoutes::Monitoring => html! {
             <SideLayout>
-                <MonitoringPage />
+                <div class="h-full overflow-scroll">
+                    <MonitoringPage />
+                </div>
             </SideLayout>
         },
-        AppRoutes::Devices => html! {
-            <SideLayout>
-                <DevicesPage />
-            </SideLayout>
-        },
-        AppRoutes::Admins => html! { <Switch<AdminRoutes> render={switch_admin} /> },
-        AppRoutes::Users => html! { <Switch<UserRoutes> render={switch_user} /> },
+        AppRoutes::Devices | AppRoutes::DevicesRoot => {
+            html! { <Switch<DeviceRoutes> render={switch_device} />}
+        }
+        AppRoutes::Admins | AppRoutes::AdminsRoot => {
+            html! { <Switch<AdminRoutes> render={switch_admin} /> }
+        }
+        AppRoutes::Users | AppRoutes::UsersRoot => {
+            html! { <Switch<UserRoutes> render={switch_user} /> }
+        }
         AppRoutes::Settings => html! {
             <SideLayout>
-                <SettingsPage />
+                <div class="h-full overflow-scroll">
+                    <SettingsPage />
+                </div>
             </SideLayout>
         },
         AppRoutes::NotFound => html! { <NotFound /> },
     }
 }
 
-pub fn switch_user(route: UserRoutes) -> Html {
+fn switch_device(route: DeviceRoutes) -> Html {
     match route {
-        UserRoutes::Users => html! {
+        DeviceRoutes::DevicesList => html! {
             <SideLayout>
-                <UsersPage />
+                <div class="h-full overflow-scroll">
+                    <DevicesPage />
+                </div>
+            </SideLayout>
+        },
+        DeviceRoutes::DeviceRegister => html! {
+            <SideLayout>
+                <div class="h-full overflow-scroll">
+                    <DeviceAdd />
+                </div>
+            </SideLayout>
+        },
+        DeviceRoutes::DeviceUpdate => html! {
+            <SideLayout>
+                <div class="h-full overflow-scroll">
+                    <DeviceUpdate />
+                </div>
+            </SideLayout>
+        },
+        DeviceRoutes::NotFound => html! { <Redirect<AppRoutes> to={AppRoutes::NotFound} /> },
+    }
+}
+
+fn switch_user(route: UserRoutes) -> Html {
+    match route {
+        UserRoutes::UsersList => html! {
+            <SideLayout>
+                <div class="h-full overflow-scroll">
+                    <UsersPage />
+                </div>
             </SideLayout>
         },
         UserRoutes::UserUpdate => html! {
             <SideLayout>
-                <UpdateUser />
+                <div class="h-full overflow-scroll">
+                    <UpdateUser />
+                </div>
             </SideLayout>
         },
         UserRoutes::UserRegister => html! {
             <SideLayout>
-                <RegisterUser />
+                <div class="h-full overflow-scroll">
+                    <RegisterUser />
+                </div>
             </SideLayout>
         },
-        UserRoutes::NotFound => html! { <NotFound /> },
+        UserRoutes::NotFound => html! { <Redirect<AppRoutes> to={AppRoutes::NotFound} /> },
     }
 }
 
-pub fn switch_admin(route: AdminRoutes) -> Html {
+fn switch_admin(route: AdminRoutes) -> Html {
     match route {
-        AdminRoutes::Admins => html! {
+        AdminRoutes::AdminsList => html! {
             <SideLayout>
-                <AdminsPage />
+                <div class="h-full overflow-scroll">
+                    <AdminsPage />
+                </div>
             </SideLayout>
         },
         AdminRoutes::AdminUpdate => html! {
             <SideLayout>
-                <UpdateAdmin />
+                <div class="h-full overflow-scroll">
+                    <UpdateAdmin />
+                </div>
             </SideLayout>
         },
         AdminRoutes::AdminRegister => html! {
             <SideLayout>
-                <RegisterAdmin />
+                <div class="h-full overflow-scroll">
+                    <RegisterAdmin />
+                </div>
             </SideLayout>
         },
-        AdminRoutes::NotFound => html! { <NotFound /> },
+        AdminRoutes::NotFound => html! { <Redirect<AppRoutes> to={AppRoutes::NotFound} /> },
     }
 }
 
@@ -156,7 +228,7 @@ pub fn switch_admin(route: AdminRoutes) -> Html {
 #[function_component(App)]
 pub fn app() -> Html {
     html! {
-        <div class="h-screen w-screen text-white">
+        <div class="h-screen w-screen text-gray-600 bg-gray-200">
             <BrowserRouter>
                 <UserContextProvider>
                     <Switch<AppRoutes> render={switch_main} />

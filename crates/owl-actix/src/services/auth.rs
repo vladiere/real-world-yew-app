@@ -8,7 +8,6 @@ use hmac::{Hmac, Mac};
 use jwt::SignWithKey;
 use serde_json::json;
 use sha2::Sha256;
-use sqlx;
 use tracing::debug;
 use uuid::Uuid;
 
@@ -52,11 +51,15 @@ pub async fn register_admin(
             let res = QueryReturnMessage {
                 message: "Created successfully".to_string(),
             };
-            HttpResponse::InternalServerError().json(res)
+            HttpResponse::Ok().json(res)
         }
         Err(error) => {
             debug!("{:<12} - query error: {error:?}", "ERROR");
-            HttpResponse::InternalServerError().json(format!("{error:?}"))
+            let error = ErrorStatus {
+                message: format!("{error:?}"),
+                status: 500,
+            };
+            HttpResponse::InternalServerError().json(error)
         }
     }
 }
@@ -227,19 +230,19 @@ pub async fn logout_admin(state: Data<AppState>, cred: Json<LogoutInfoWrapper>) 
                     .await
                 {
                     Ok(_) => {
-                        let result = json!({
-                            "message": "logout successfully"
-                        });
-                        HttpResponse::Ok().json(result)
+                        let res = QueryReturnMessage {
+                            message: "Logout successfully".to_string(),
+                        };
+                        HttpResponse::Ok().json(res)
                     }
                     Err(error) => {
-                        debug!("{:<12} - logout_admin query2 login {error:?}", "ERROR");
+                        debug!("{:<12} - logout_admin query2 {error:?}", "ERROR");
                         HttpResponse::InternalServerError().json(format!("{error:?}"))
                     }
                 }
             }
             Err(error) => {
-                debug!("{:<12} - logout_admin query login {error:?}", "ERROR");
+                debug!("{:<12} - logout_admin query1 {error:?}", "ERROR");
                 HttpResponse::InternalServerError().json(format!("{error:?}"))
             }
         }

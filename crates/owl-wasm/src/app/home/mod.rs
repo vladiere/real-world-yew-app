@@ -1,5 +1,7 @@
 pub mod admins;
 pub mod dashboard;
+pub mod device_add;
+pub mod device_update;
 pub mod devices;
 pub mod monitoring;
 pub mod register_admin;

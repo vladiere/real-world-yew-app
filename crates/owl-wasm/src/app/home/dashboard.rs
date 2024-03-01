@@ -14,7 +14,7 @@ pub fn dashboard_page() -> Html {
     }
 
     html! {
-        <div class="flex flex-col w-full h-full bg-gray-100 dark:bg-gray-800 dark:text-gray-200">
+        <div class="flex flex-col w-full h-full dark:bg-gray-800 dark:text-gray-200">
             <div class="flex flex-col mb-5">
                 <h1 class="text-2xl font-bold">{ "Dashboard" }</h1>
                 <div class="flex font-medium text-6md gap-2">
@@ -26,9 +26,9 @@ pub fn dashboard_page() -> Html {
             <div class="w-full flex flex-col mb-20 gap-8">
                 <div class="flex flex-row gap-5">
                     <div class="w-2/4 px-3">
-                        <div class="w-full bg-slate-400 dark:bg-slate-900 flex flex-col justify-between text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border border-slate-700">
+                        <div class="w-full bg-gray-400 dark:bg-slate-900 flex flex-col justify-between text-gray-700 dark:text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border dark:border-slate-700">
                             <div class="w-full flex flex-row justify-between p-6">
-                                <div class="text-gray-400">
+                                <div class="dark:text-gray-400">
                                     <p class="font-semibold text-3xl">{ "11" }</p>
                                     <p>{ "Registered Users" }</p>
                                 </div>
@@ -36,7 +36,7 @@ pub fn dashboard_page() -> Html {
                                     <Icon icon_id={IconId::FontAwesomeSolidUsers} width={"28px".to_owned()} height={"28px".to_owned()} />
                                 </div>
                             </div>
-                            <Link<AppRoutes> to={AppRoutes::Users} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] hover:text-blue-600 cursor-pointer">
+                            <Link<AppRoutes> to={AppRoutes::UsersRoot} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] dark:hover:text-blue-600 hover:text-blue-500 cursor-pointer">
                                 <p class="text-4md">
                                     { "View all users" }
                                 </p>
@@ -45,9 +45,9 @@ pub fn dashboard_page() -> Html {
                         </div>
                     </div>
                     <div class="w-2/4 px-3">
-                        <div class="w-full bg-slate-400 dark:bg-slate-900 flex flex-col justify-between text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border border-slate-700">
+                        <div class="w-full bg-gray-400 dark:bg-slate-900 flex flex-col justify-between text-gray-700 dark:text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border dark:border-slate-700">
                             <div class="w-full flex flex-row justify-between p-6">
-                                <div class="text-gray-400">
+                                <div class="dark:text-gray-400">
                                     <p class="font-semibold text-3xl">{ "8" }</p>
                                     <p>{ "Admins Employeed" }</p>
                                 </div>
@@ -55,7 +55,7 @@ pub fn dashboard_page() -> Html {
                                     <Icon icon_id={IconId::FontAwesomeSolidUsersGear} width={"28px".to_owned()} height={"28px".to_owned()} />
                                 </div>
                             </div>
-                            <Link<AppRoutes> to={AppRoutes::Admins} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] hover:text-blue-600 cursor-pointer">
+                            <Link<AppRoutes> to={AppRoutes::AdminsRoot} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] dark:hover:text-blue-600 hover:text-blue-500 cursor-pointer">
                                 <p class="text-4md">
                                     { "View all admins" }
                                 </p>
@@ -66,9 +66,9 @@ pub fn dashboard_page() -> Html {
                 </div>
                 <div class="flex flex-row gap-5">
                     <div class="w-2/4 px-3">
-                        <div class="w-full bg-slate-400 dark:bg-slate-900 flex flex-col justify-between text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border border-slate-700">
+                        <div class="w-full bg-gray-400 dark:bg-slate-900 flex flex-col justify-between text-gray-700 dark:text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border dark:border-slate-700">
                             <div class="w-full flex flex-row justify-between p-6">
-                                <div class="text-gray-400">
+                                <div class="dark:text-gray-400">
                                     <p class="font-semibold text-3xl">{ "11" }</p>
                                     <p>{ "Devices Installed" }</p>
                                 </div>
@@ -76,7 +76,7 @@ pub fn dashboard_page() -> Html {
                                     <Icon icon_id={IconId::LucideWebcam} width={"28px".to_owned()} height={"28px".to_owned()} />
                                 </div>
                             </div>
-                            <Link<AppRoutes> to={AppRoutes::Devices} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] hover:text-blue-600 cursor-pointer">
+                            <Link<AppRoutes> to={AppRoutes::DevicesRoot} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] dark:hover:text-blue-600 hover:text-blue-500 cursor-pointer">
                                 <p class="text-4md">
                                     { "View all devices" }
                                 </p>
@@ -85,9 +85,9 @@ pub fn dashboard_page() -> Html {
                         </div>
                     </div>
                     <div class="w-2/4 px-3">
-                        <div class="w-full bg-slate-400 dark:bg-slate-900 flex flex-col justify-between text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border border-slate-700">
+                        <div class="w-full bg-gray-400 dark:bg-slate-900 flex flex-col justify-between text-gray-700 dark:text-blue-400 rounded-lg flex items-center mb-6 xl:mb-0 border dark:border-slate-700">
                             <div class="w-full flex flex-row justify-between p-6">
-                                <div class="text-gray-400">
+                                <div class="dark:text-gray-400">
                                     <p class="font-semibold text-3xl">{ "8" }</p>
                                     <p>{ "Door Opened" }</p>
                                 </div>
@@ -95,7 +95,7 @@ pub fn dashboard_page() -> Html {
                                     <Icon icon_id={IconId::LucideMonitor} width={"28px".to_owned()} height={"28px".to_owned()} />
                                 </div>
                             </div>
-                            <Link<AppRoutes> to={AppRoutes::Monitoring} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] hover:text-blue-600 cursor-pointer">
+                            <Link<AppRoutes> to={AppRoutes::Monitoring} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] dark:hover:text-blue-600 hover:text-blue-500 cursor-pointer">
                                 <p class="text-4md">
                                     { "View realtime monitoring" }
                                 </p>
