@@ -6,7 +6,15 @@ use actix_web::{
 };
 use actix_web_httpauth::middleware::HttpAuthentication;
 use owl_actix::{
-    admin::admin_info::get_admin_info, login_admin, logout_admin, register_admin, server_config,
+    admin::{
+        admin::{admin_update, remove_one_admin, update_one_admin},
+        admin_info::{get_admin_info, get_all_admin, get_one_admin},
+    },
+    login_admin, logout_admin, register_admin, server_config,
+    user::{
+        users::{add_member, register_user, remove_member, remove_one_user},
+        users_info::{get_all_user, get_one_user, user_members},
+    },
     validator, AdminContextExtractor, AppState,
 };
 use sqlx::mysql::MySqlPoolOptions;
@@ -44,16 +52,31 @@ async fn main() -> std::io::Result<()> {
             .app_data(Data::new(AdminContextExtractor))
             .service(
                 web::scope("/api").service(greet).service(
-                    web::scope("/admin")
-                        .service(register_admin)
-                        .service(login_admin)
-                        .service(
-                            web::scope("")
-                                .wrap(bearer_middleware)
-                                .service(auth_get)
-                                .service(logout_admin)
-                                .service(get_admin_info),
-                        ),
+                    web::scope("/admin").service(login_admin).service(
+                        web::scope("")
+                            .wrap(bearer_middleware)
+                            .service(get_admin_info)
+                            .service(get_all_admin)
+                            .service(get_one_admin)
+                            .service(logout_admin)
+                            .service(register_admin)
+                            .service(admin_update)
+                            .service(update_one_admin)
+                            .service(remove_one_admin)
+                            .service(
+                                web::scope("/user")
+                                    .service(get_all_user)
+                                    .service(get_one_user)
+                                    .service(register_user)
+                                    .service(remove_one_user)
+                                    .service(
+                                        web::scope("/member")
+                                            .service(user_members)
+                                            .service(add_member)
+                                            .service(remove_member),
+                                    ),
+                            ),
+                    ),
                 ),
             )
             .wrap(cors)

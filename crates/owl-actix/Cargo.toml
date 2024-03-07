@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 actix-web = "4.4.1"
 actix-web-httpauth = "0.8.1"
+actix-multipart = "0.6.1"
 chrono = { version = "0.4.31", features = ["serde"] }
 argonautica = "0.2.0"
 hmac = "0.12.1"
@@ -34,6 +35,11 @@ derive_more = { version = "0.99.17", features = ["from", "display"] }
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 uuid = { version = "1.6.1", features = ["v4", "fast-rng", "serde"] }
+
+#----File upload
+tempfile = "3.10"
+mime = "0.3"
+image = "0.24"
 
 #---- Others
 futures-util = "0.3"

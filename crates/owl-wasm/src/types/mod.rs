@@ -13,6 +13,9 @@ use std::collections::HashMap;
 
 pub use accounts::{
     AccountRegisterInfo, AccountRegisterInfoWrapper, AccountsInfo, AccountsInfoWrapper,
+    AllAdminInfo, AllAdminInfoWrapper, AllMembersInfo, AllMembersInfoWrapper, MemberInfo,
+    MemberInfoWrapper, OneAccountInfo, OneAccountInfoWrapper, OneAdminInfo, OneAdminInfoWrapper,
+    UpdateOneAdminInfo, UpdateOneAdminInfoWrapper,
 };
 pub use auth::{
     AdminInfo, AdminInfoWrapper, AdminRegisterInfo, AdminRegisterInfoWrapper, AdminUpdateInfo,

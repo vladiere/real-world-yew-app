@@ -6,7 +6,6 @@ use actix_web::{
 use argonautica::{Hasher, Verifier};
 use hmac::{Hmac, Mac};
 use jwt::SignWithKey;
-use serde_json::json;
 use sha2::Sha256;
 use tracing::debug;
 use uuid::Uuid;
@@ -14,33 +13,41 @@ use uuid::Uuid;
 use crate::{
     admin::{CurrentAdminInfo, CurrentAdminInfoWithToken, CurrentAdminInfoWrapper},
     appstate::AppState,
-    server_config, AuthAdmin, LogoutInfoId, LogoutInfoWrapper, QueryReturnMessage, RoleUser,
+    server_config, AuthAdmin, LogoutInfoId, LogoutInfoWrapper, QueryReturnMessage,
+    RegisterAdminBodyWrapper, RoleUser,
 };
-use crate::{middleware::TokenClaims, ErrorStatus, LoginAdmin, RegisterAdminBody};
+use crate::{middleware::TokenClaims, ErrorStatus, LoginAdmin};
 
 #[post("/register")]
 pub async fn register_admin(
     state: Data<AppState>,
-    body: Json<RegisterAdminBody>,
+    body: Json<RegisterAdminBodyWrapper>,
 ) -> impl Responder {
-    let user: RegisterAdminBody = body.into_inner();
-    let query = "CALL create_user_or_admin(?,?,?,?,?,?,?,?);";
+    let user: RegisterAdminBodyWrapper = body.into_inner();
+    let query = "CALL register_admin(?,?,?,?,?,?,?,?,?,?,?,?);";
 
-    debug!("{:<12} - register_admin: {}", user.username, "ATTEMPTING");
+    debug!(
+        "{:<12} - register_admin: {}",
+        user.admin.username, "ATTEMPTING"
+    );
 
     let mut hasher = Hasher::default();
     let hash = hasher
-        .with_password(user.password)
+        .with_password(user.admin.password)
         .with_secret_key(&server_config().HASH_SECRET)
         .hash()
         .unwrap();
 
     match sqlx::query(query)
-        .bind(user.firstname)
-        .bind(user.middlename)
-        .bind(user.lastname)
-        .bind(user.email_address)
-        .bind(user.username)
+        .bind(user.admin.firstname)
+        .bind(user.admin.middlename)
+        .bind(user.admin.lastname)
+        .bind(user.admin.email_address)
+        .bind(user.admin.gender)
+        .bind(user.admin.recent_address)
+        .bind(user.admin.civil_status)
+        .bind(user.admin.occupation)
+        .bind(user.admin.username)
         .bind(hash)
         .bind(Uuid::new_v4().to_string())
         .bind(Uuid::new_v4().to_string())
@@ -66,10 +73,10 @@ pub async fn register_admin(
 
 #[post("/login")]
 pub async fn login_admin(state: Data<AppState>, credentials: Json<LoginAdmin>) -> impl Responder {
-    let query = "SELECT id, username, password, token_salt from user_login WHERE username = ?";
-    let query2 = "SELECT role_user FROM user_info WHERE id = ?";
-    let query3 = "INSERT INTO refresh_token (username,refresh_token) VALUES (?,?)";
-    let query4 = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from user_info_details where id = ?";
+    let query = "select id, username, password, token_salt from user_login where username = ?";
+    let query2 = "select role_user from user_info were id = ?";
+    let query3 = "insert into refresh_token (username,refresh_token) VALUES (?,?)";
+    let query4 = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from admin_info_details where id = ?";
 
     let jwt_secret: Hmac<Sha256> =
         Hmac::new_from_slice(&server_config().JWT_SECRET.as_bytes()).unwrap();

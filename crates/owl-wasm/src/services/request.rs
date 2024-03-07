@@ -3,7 +3,6 @@ use gloo::storage::{LocalStorage, Storage};
 use lazy_static::lazy_static;
 use parking_lot::RwLock;
 use serde::{de::DeserializeOwned, Serialize};
-use web_sys::{console, js_sys::JsString};
 
 use crate::error::Error;
 use crate::types::{AuthorizeErrors, ErrorInfo};

@@ -6,6 +6,6 @@ pub mod devices;
 pub mod monitoring;
 pub mod register_admin;
 pub mod register_user;
-pub mod update_admin;
-pub mod update_user;
 pub mod users;
+pub mod view_admin;
+pub mod view_user;

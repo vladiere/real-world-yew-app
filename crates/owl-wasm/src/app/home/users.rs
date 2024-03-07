@@ -1,126 +1,86 @@
 use yew::prelude::*;
+use yew_hooks::prelude::*;
+use yew_icons::{Icon, IconId};
 use yew_router::prelude::*;
 
-use crate::app::UserRoutes;
+use crate::{
+    app::UserRoutes,
+    components::home::users::{search_user::SearchUserComponent, users_table::UsersTable},
+    services::accounts::get_all_users,
+    types::AccountsInfoWrapper,
+};
 
 #[function_component(UsersPage)]
 pub fn users_page() -> Html {
+    let res_accounts = use_state(|| AccountsInfoWrapper { accounts: vec![] });
+    let is_not_empty = use_state(|| false);
+
+    let all_users = use_async_with_options(
+        async move { get_all_users().await },
+        UseAsyncOptions::enable_auto(),
+    );
+
+    let resaccount = res_accounts.clone();
+    let isnot_empty = is_not_empty.clone();
+    let search_callback = Callback::from(move |filtered_data: AccountsInfoWrapper| {
+        isnot_empty.set(true);
+        resaccount.set(filtered_data);
+    });
+
+    let callback_deleted = {
+        let all_users = all_users.clone();
+        Callback::from(move |user_id| {
+            if let Some(mut user) = all_users.data.clone() {
+                user.accounts.retain(|c| c.id != user_id);
+                all_users.update(user);
+            }
+        })
+    };
+
     html! {
         <div class="flex flex-col gap-5">
             <h1 class="text-2xl font-bold">{ "Users List" }</h1>
             <div class="flex flex-row gap-10 justify-between">
                 <Link<UserRoutes> to={UserRoutes::UserRegister} classes="flex items-center gap-2 middle none center mr-4 rounded-lg bg-green-500 py-3 px-5 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-                    <svg fill="currentColor" width="24px" height="24px" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M256,136a7.99977,7.99977,0,0,1-8,8H232v16a8,8,0,0,1-16,0V144H200a8,8,0,0,1,0-16h16V112a8,8,0,0,1,16,0v16h16A7.99977,7.99977,0,0,1,256,136ZM144.1427,157.55811a68,68,0,1,0-72.2854,0,119.88787,119.88787,0,0,0-55.77478,37.29394,8.00012,8.00012,0,0,0,6.12549,13.146l171.58447.00049a8.00012,8.00012,0,0,0,6.12549-13.146A119.88993,119.88993,0,0,0,144.1427,157.55811Z"></path></g></svg>
+                        <Icon icon_id={IconId::FontAwesomeSolidUserPlus} width={"20px".to_owned()} height={"20px".to_owned()}/>
                     { "Add new User" }
                 </Link<UserRoutes>>
-                <div class="relative">
-                    <input class="w-full h-10 pl-10 pr-5 text-sm rounded-full appearance-none focus:outline-none bg-gray-100 dark:bg-gray-800 border border-gray-100 dark:border-gray-700" placeholder="Search..."/>
-                    <button class="absolute top-0 left-0 mt-3 ml-4">
-                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 stroke-current" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    </button>
-                </div>
+                {
+                    if let Some(users) = &all_users.data {
+
+                        html! {
+                            <SearchUserComponent search_user={(*users).clone()} callback={search_callback.clone()} />
+                        }
+                    } else {
+                        html! {
+                            <div class="rounded-lg text-center">
+                                <span class="text-2xl font-medium">{ "No data available to search" }</span>
+                            </div>
+                        }
+                    }
+                }
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
-                    <thead class="border-b dark:border-0 text-xs text-gray-700 uppercase bg-neutral-400 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">{ "CID#" }</th>
-                            <th scope="col" class="px-6 py-3">{ "Fullname" }</th>
-                            <th scope="col" class="px-6 py-3">{ "Tower" }</th>
-                            <th scope="col" class="px-6 py-3">{ "Room" }</th>
-                            <th scope="col" class="px-6 py-3">{ "Package" }</th>
-                            <th scope="col" class="px-6 py-3">{ "Date Enrolled" }</th>
-                            <th scope="col" class="px-6 py-3">{ "Status" }</th>
-                            <th scope="col" class="px-3 py-3">
-                                <span class="sr-only">{ "Edit" }</span>
-                                <span class="sr-only">{ "Remove" }</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b bg-gray-400 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                { "124143" }
-                            </th>
-                            <td class="px-6 py-4">
-                                { "Christian L. Perez" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "A69B" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "A1" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "VVIP" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "2024-12-20" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "Active" }
-                            </td>
-                            <td class="px-6 py-4 text-right flex gap-5">
-                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{ "Edit" }</a>
-                                <a href="#" class="font-medium text-red-500 dark:text-red-500 hover:underline">{ "Remove" }</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b bg-gray-400 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                { "23412" }
-                            </th>
-                            <td class="px-6 py-4">
-                                { "Kulas T. Great" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "A69C" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "B1" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "VVIP" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "2024-11-20" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "Enactive" }
-                            </td>
-                            <td class="px-6 py-4 text-right flex gap-5">
-                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{ "Edit" }</a>
-                                <a href="#" class="font-medium text-red-500 dark:text-red-500 hover:underline">{ "Remove" }</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b bg-gray-400 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-600">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                { "523423" }
-                            </th>
-                            <td class="px-6 py-4">
-                                { "Nikulas G. Goat" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "B69C" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "D1" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "VVIP" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "2024-11-02" }
-                            </td>
-                            <td class="px-6 py-4">
-                                { "Active" }
-                            </td>
-                            <td class="px-6 py-4 text-right flex gap-5">
-                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{ "Edit" }</a>
-                                <a href="#" class="font-medium text-red-500 dark:text-red-500 hover:underline">{ "Remove" }</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                {
+                    if !(*is_not_empty).clone() {
+                        if let Some(res_data) = &all_users.data {
+                            html! {
+                                <UsersTable data={(*res_data).clone()} callback={callback_deleted.clone()}/>
+                            }
+                        } else {
+                            html! {
+                                <div class="w-full h-1/4 flex flex-col items-center justify-center">
+                                    <span class="text-4xl font-bold">{ "Empty" }</span>
+                                    <span class="text-2xl font-medium">{ "No data available" }</span>
+                                </div>
+                            }
+                        }
+                    } else {
+                        html! {
+                            <UsersTable data={(*res_accounts).clone()} callback={callback_deleted.clone()}/>
+                        }
+                    }
+                }
             </div>
         </div>
     }

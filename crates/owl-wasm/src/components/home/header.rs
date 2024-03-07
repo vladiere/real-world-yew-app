@@ -1,4 +1,3 @@
-use web_sys::{console, js_sys::JsString};
 use yew::prelude::*;
 use yew_router::prelude::*;
 

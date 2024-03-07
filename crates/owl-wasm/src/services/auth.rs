@@ -1,4 +1,4 @@
-use super::{request_get, request_post, request_put};
+use super::{request_get, request_post};
 use crate::{error::Error, types::*};
 
 /// GET current admin info.
@@ -32,14 +32,14 @@ pub async fn logout_admin(admin_info: LogoutInfoWrapper) -> Result<QueryReturnMe
         .await
 }
 
-/// Get the admin info
+/// Get the admin info.
 pub async fn get_info_admin() -> Result<AdminRegisterInfoWrapper, Error> {
     request_get::<AdminRegisterInfoWrapper>("/admin/info".to_string()).await
 }
 
 /// Save info of current admin
-pub async fn save(admin_update_info: AdminUpdateInfoWrapper) -> Result<AdminInfoWrapper, Error> {
-    request_put::<AdminUpdateInfoWrapper, AdminInfoWrapper>(
+pub async fn save(admin_update_info: AdminUpdateInfo) -> Result<QueryReturnMessage, Error> {
+    request_post::<AdminUpdateInfo, QueryReturnMessage>(
         "/admin/update".to_string(),
         admin_update_info,
     )

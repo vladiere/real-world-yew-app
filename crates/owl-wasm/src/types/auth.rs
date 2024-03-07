@@ -20,7 +20,10 @@ pub struct AdminRegisterInfo {
     pub middlename: String,
     pub lastname: String,
     pub email_address: String,
-    pub role_user: String,
+    pub gender: String,
+    pub recent_address: String,
+    pub civil_status: String,
+    pub occupation: String,
     pub username: String,
     pub password: String,
 }
@@ -72,8 +75,6 @@ pub struct AdminInfoWrapper {
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct AdminUpdateInfo {
-    pub email_address: String,
-    pub username: String,
     pub password: String,
 }
 

@@ -1,18 +1,25 @@
-use actix_web::{get, web::Data, HttpResponse, Responder};
+use actix_web::{
+    get,
+    web::{Data, Path},
+    HttpResponse, Responder,
+};
 use hmac::{Hmac, Mac};
 use jwt::SignWithKey;
 use sha2::Sha256;
 use tracing::debug;
 
 use crate::{
-    admin::{CurrentAdminInfo, CurrentAdminInfoWithToken, CurrentAdminInfoWrapper},
-    server_config, AdminContext, AppState, TokenClaims,
+    admin::{
+        AdminsInfo, AdminsInfoWrapper, CurrentAdminInfo, CurrentAdminInfoWithToken,
+        CurrentAdminInfoWrapper, OneAdminInfo, OneAdminInfoWrapper,
+    },
+    server_config, AdminContext, AppState, ErrorStatus, TokenClaims,
 };
 
 #[get("/info")]
 pub async fn get_admin_info(state: Data<AppState>, ctx: AdminContext) -> impl Responder {
     let id = ctx.id;
-    let query = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from user_info_details where id = ?";
+    let query = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from admin_info_details where id = ?";
 
     let jwt_secret: Hmac<Sha256> =
         Hmac::new_from_slice(&server_config().JWT_SECRET.as_bytes()).unwrap();
@@ -50,8 +57,60 @@ pub async fn get_admin_info(state: Data<AppState>, ctx: AdminContext) -> impl Re
             HttpResponse::Ok().json(current_admin)
         }
         Err(error) => {
-            debug!("{:<12} - query error: {error:?}", "ERROR");
+            debug!("{:<12} - query error on get_admin_info: {error:?}", "ERROR");
             HttpResponse::InternalServerError().json(format!("{error:?}"))
+        }
+    }
+}
+
+#[get("/{id}")]
+pub async fn get_one_admin(state: Data<AppState>, id: Path<i64>) -> impl Responder {
+    let query = "select firstname, middlename, lastname, email_address, gender, recent_address, civil_status, occupation, username, date_enrolled, status from admin_info_details where id = ? and role_user = 'Admin'";
+
+    debug!("{:<12} - get_one_admin", "HANDLER");
+
+    match sqlx::query_as::<_, OneAdminInfo>(query)
+        .bind(*id)
+        .fetch_one(&state.db)
+        .await
+    {
+        Ok(admin) => {
+            let one_admin = OneAdminInfoWrapper { admin };
+            HttpResponse::Ok().json(one_admin)
+        }
+        Err(error) => {
+            debug!("{:<12} - query error on get_one_admin: {error:?}", "ERROR");
+            let error = ErrorStatus {
+                message: format!("{error:?}"),
+                status: 500,
+            };
+            HttpResponse::InternalServerError().json(error)
+        }
+    }
+}
+
+#[get("/all")]
+pub async fn get_all_admin(state: Data<AppState>, ctx: AdminContext) -> impl Responder {
+    let query = "select id, firstname, middlename, lastname, email_address, username, date_enrolled, status from admin_info_details where id != ? and role_user = 'Admin' and status != 'Inactive'";
+
+    debug!("{:<12} - get_all_admin", "HANDLER");
+
+    match sqlx::query_as::<_, AdminsInfo>(query)
+        .bind(ctx.id)
+        .fetch_all(&state.db)
+        .await
+    {
+        Ok(admins) => {
+            let all_admin = AdminsInfoWrapper { admins };
+            HttpResponse::Ok().json(all_admin)
+        }
+        Err(error) => {
+            debug!("{:<12} - query error on get_all_admin: {error:?}", "ERROR");
+            let error = ErrorStatus {
+                message: format!("{error:?}"),
+                status: 500,
+            };
+            HttpResponse::InternalServerError().json(error)
         }
     }
 }

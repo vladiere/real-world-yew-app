@@ -1,6 +1,15 @@
 use serde::{Deserialize, Serialize};
+use sqlx::{mysql::MySqlRow, FromRow, Row};
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
+pub mod users;
+pub mod users_info;
+
+#[derive(Deserialize, Serialize, Clone, Debug, FromRow)]
+pub struct UserId {
+    pub id: i64,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct AccountRegisterInfo {
     pub firstname: String,
@@ -16,65 +25,10 @@ pub struct AccountRegisterInfo {
     pub package: String,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct AccountRegisterInfoWrapper {
     pub account: AccountRegisterInfo,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub struct AllAdminInfo {
-    pub id: i64,
-    pub firstname: String,
-    pub lastname: String,
-    pub middlename: String,
-    pub email_address: String,
-    pub username: String,
-    pub date_enrolled: String,
-    pub status: String,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Default)]
-#[serde(rename_all = "camelCase")]
-pub struct AllAdminInfoWrapper {
-    pub admins: Vec<AllAdminInfo>,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct OneAdminInfo {
-    pub firstname: String,
-    pub lastname: String,
-    pub middlename: String,
-    pub email_address: String,
-    pub gender: String,
-    pub recent_address: String,
-    pub civil_status: String,
-    pub occupation: String,
-    pub username: String,
-    pub date_enrolled: String,
-    pub status: String,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct OneAdminInfoWrapper {
-    pub admin: OneAdminInfo,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
-#[serde(rename_all = "camelCase")]
-pub struct UpdateOneAdminInfo {
-    pub admin_id: i64,
-    pub email_address: String,
-    pub username: String,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct UpdateOneAdminInfoWrapper {
-    pub admin: UpdateOneAdminInfo,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -93,7 +47,7 @@ pub struct AccountsInfo {
     pub status: String,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct AccountsInfoWrapper {
     pub accounts: Vec<AccountsInfo>,
@@ -122,7 +76,7 @@ pub struct OneAccountInfoWrapper {
     pub account: OneAccountInfo,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct MemberInfo {
     pub firstname: String,
@@ -146,7 +100,7 @@ pub struct AllMembersInfo {
     pub firstname: String,
     pub middlename: String,
     pub lastname: String,
-    pub age: i64,
+    pub age: i32,
     pub gender: String,
     pub date_enrolled: String,
 }
@@ -155,4 +109,55 @@ pub struct AllMembersInfo {
 #[serde(rename_all = "camelCase")]
 pub struct AllMembersInfoWrapper {
     pub members: Vec<AllMembersInfo>,
+}
+
+impl FromRow<'_, MySqlRow> for AllMembersInfo {
+    fn from_row(row: &MySqlRow) -> Result<Self, sqlx::Error> {
+        Ok(Self {
+            id: row.try_get(0)?,
+            firstname: row.try_get(1)?,
+            middlename: row.try_get(2)?,
+            lastname: row.try_get(3)?,
+            age: row.try_get(4)?,
+            gender: row.try_get(5)?,
+            date_enrolled: row.try_get(6)?,
+        })
+    }
+}
+
+impl FromRow<'_, MySqlRow> for OneAccountInfo {
+    fn from_row(row: &MySqlRow) -> Result<Self, sqlx::Error> {
+        Ok(Self {
+            firstname: row.try_get(0)?,
+            middlename: row.try_get(1)?,
+            lastname: row.try_get(2)?,
+            email_address: row.try_get(3)?,
+            gender: row.try_get(4)?,
+            recent_address: row.try_get(5)?,
+            civil_status: row.try_get(6)?,
+            occupation: row.try_get(7)?,
+            tower: row.try_get(8)?,
+            room: row.try_get(9)?,
+            package: row.try_get(10)?,
+            date_enrolled: row.try_get(11)?,
+        })
+    }
+}
+
+impl FromRow<'_, MySqlRow> for AccountsInfo {
+    fn from_row(row: &MySqlRow) -> Result<Self, sqlx::Error> {
+        Ok(Self {
+            id: row.try_get(0)?,
+            firstname: row.try_get(1)?,
+            middlename: row.try_get(2)?,
+            lastname: row.try_get(3)?,
+            email_address: row.try_get(4)?,
+            gender: row.try_get(5)?,
+            tower: row.try_get(6)?,
+            room: row.try_get(7)?,
+            package: row.try_get(8)?,
+            date_enrolled: row.try_get(9)?,
+            status: row.try_get(10)?,
+        })
+    }
 }

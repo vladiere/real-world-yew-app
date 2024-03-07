@@ -26,6 +26,11 @@ CREATE TABLE user_info (
   middlename VARCHAR(255) NOT NULL,
   lastname VARCHAR(255) NOT NULL,
   email_address VARCHAR(255) NOT NULL UNIQUE,
+  recent_address VARCHAR(255) NOT NULL,
+  civil_status ENUM('Single','Married','Divorced','Widowed','Separate') NOT NULL DEFAULT 'Single',
+  gender ENUM('Male','Female','Other') NOT NULL DEFAULT 'Male',
+  occupation VARCHAR(255) NOT NULL,
+  status enum('Active', 'Inactive') NOT NULL DEFAULT 'Active',
   ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   mtime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -48,7 +53,7 @@ CREATE TABLE building (
   user_id BIGINT NOT NULL,
   tower VARCHAR(255) NOT NULL,
   room VARCHAR(255) NOT NULL,
-  pack VARCHAR(255) NOT NULL,
+  package ENUM('Standard','Vip','Vvip','Business','Family','Romance','Extended','Inclusive') NOT NULL DEFAULT 'Standard',
   ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   mtime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -61,12 +66,3 @@ CREATE TABLE refresh_token (
   ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   mtime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
--- Create feedbacks table
-CREATE TABLE feedbacks (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  message VARCHAR(255) NOT NULL,
-  ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-

@@ -1,13 +1,10 @@
 use yew::prelude::*;
-use yew_hooks::use_async;
 use yew_router::prelude::*;
 
 use crate::{
     app::{AdminRoutes, AppRoutes, DeviceRoutes, UserRoutes},
     assets::icons::ArrowLeft,
     hooks::use_user_context,
-    services::{auth::logout_admin, get_refresh},
-    types::*,
 };
 use yew_icons::{Icon, IconId};
 
@@ -20,16 +17,16 @@ pub struct Props {
 pub fn side_layout(props: &Props) -> Html {
     let open_state = use_state(|| false);
     let def_class = use_state(|| {
-        "h-screen p-5 pt-8 relative duration-300 w-64 border-r border-slate-400 dark:border-slate-700"
+        "h-screen p-5 pt-8 relative duration-300 w-20 border-r border-slate-400 dark:border-slate-700"
     });
     let def_class_arrow = use_state(|| {
-        "bg-slate-700 w-[25px] rounded-full absolute -right-3 top-9 border border-[#16B1BB] cursor-pointer"
+        "bg-slate-700 w-[25px] rounded-full absolute -right-3 top-9 border border-[#16B1BB] cursor-pointer rotate-180"
     });
-    let h1_class = use_state(|| "text-8md origin-left font-medium uppercase");
+    let h1_class = use_state(|| "text-8md origin-left font-medium uppercase scale-0");
     let li_class = use_state(|| {
         "text-sm flex items-center gap-x-4 cursor-pointer p-2 dark:hover:bg-slate-700 hover:bg-slate-500 hover:text-gray-200 rounded-md mt-2 duration-300"
     });
-    let span_class = use_state(|| "text-base font-medium flex-1");
+    let span_class = use_state(|| "text-base font-medium flex-1 scale-0");
 
     let set_open = {
         let def_class = def_class.clone();
@@ -42,56 +39,22 @@ pub fn side_layout(props: &Props) -> Html {
             if *open_state {
                 open_state.set(false);
                 def_class
-                    .set("h-screen p-4 pt-8 relative duration-200 w-64 border-r border-slate-400 dark:border-slate-700");
-                def_class_arrow.set("bg-slate-700 w-[25px] rounded-full absolute -right-3 top-9 border border-[#16B1BB] cursor-pointer");
-                h1_class.set("text-8md origin-left font-medium uppercase duration-300");
-                span_class.set("text-base font-medium flex-1 duration-300");
-            } else {
-                open_state.set(true);
-                def_class
-                    .set("h-screen p-4 pt-8 relative duration-300 w-20 border-r border-slate-400 dark:border-slate-700");
+                    .set("h-screen p-4 pt-8 relative duration-200 w-20 border-r border-slate-400 dark:border-slate-700");
                 def_class_arrow.set("bg-slate-700 w-[25px] rounded-full absolute -right-3 top-9 border border-[#16B1BB] cursor-pointer rotate-180");
                 h1_class.set("text-8md origin-left font-medium uppercase duration-300 scale-0");
                 span_class.set("text-base font-medium flex-1 duration-300 scale-0");
+            } else {
+                open_state.set(true);
+                def_class
+                    .set("h-screen p-4 pt-8 relative duration-300 w-64 border-r border-slate-400 dark:border-slate-700");
+                def_class_arrow.set("bg-slate-700 w-[25px] rounded-full absolute -right-3 top-9 border border-[#16B1BB] cursor-pointer");
+                h1_class.set("text-8md origin-left font-medium uppercase duration-300");
+                span_class.set("text-base font-medium flex-1 duration-300");
             }
         })
     };
 
     let user_ctx = use_user_context();
-
-    let user_ctx_clone = user_ctx.clone();
-    let username = (*user_ctx).clone().username;
-
-    let user_logout = {
-        let token = if let Some(refresh_token) = get_refresh() {
-            refresh_token
-        } else {
-            "".to_string()
-        };
-
-        use_async(async move {
-            let logout_info = LogoutInfo {
-                refresh_token: token,
-                username,
-            };
-            let admin_info = LogoutInfoWrapper { admin: logout_info };
-            logout_admin(admin_info).await
-        })
-    };
-
-    let ctx_clone = user_ctx.clone();
-
-    use_effect_with(user_logout.clone(), move |user_logout| {
-        if let Some(_logout_info) = &user_logout.data {
-            ctx_clone.logout();
-        }
-        || ()
-    });
-
-    let on_logout = {
-        let user_logout = user_logout.clone();
-        Callback::from(move |_| user_logout.run())
-    };
 
     html! {
         <div class="flex flex-row text-gray-600 bg-gray-300 dark:bg-gray-800 dark:text-gray-200">
@@ -153,16 +116,16 @@ pub fn side_layout(props: &Props) -> Html {
                         </Link<AppRoutes>>
                     </li>
                     <li>
-                        <button class="text-sm flex items-center gap-x-4 p-2 dark:hover:bg-slate-700 hover:bg-slate-500 hover:text-gray-200 rounded-md mt-2 duration-300 w-full" onclick={on_logout}>
+                        <Link<AppRoutes> to={AppRoutes::Settings} classes={*li_class.clone()}>
                             <span class="text-2xl block float-left">
-                                <Icon icon_id={IconId::LucideLogOut} width={"28px".to_owned()} height={"28px".to_owned()} />
+                                <Icon icon_id={IconId::HeroiconsMiniSolidCog8Tooth} width={"28px".to_owned()} height={"28px".to_owned()} />
                             </span>
-                            <span class="text-base font-medium flex-1 text-left">{ "Logout" }</span>
-                        </button>
+                            <span class={*span_class.clone()}>{ "Settings" }</span>
+                        </Link<AppRoutes>>
                     </li>
                 </ul>
             </div>
-            <div class="p-8 w-full">
+            <div class="p-8 w-full overflow-y-scroll">
                 { for props.children.iter() }
             </div>
         </div>

@@ -1,5 +1,6 @@
 pub mod accounts;
 pub mod auth;
+pub mod members;
 pub mod monitoring;
 pub mod reports;
 pub mod request;

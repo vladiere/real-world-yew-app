@@ -1,6 +1,7 @@
 pub mod admin;
 mod auth;
 pub mod extract_token;
+pub mod user;
 
 // pub use admin::*;
 pub use auth::*;
@@ -28,16 +29,25 @@ pub struct RoleUser {
     role_user: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct RegisterAdminBody {
     pub firstname: String,
     pub middlename: String,
     pub lastname: String,
     pub email_address: String,
-    pub role_user: String,
+    pub gender: String,
+    pub recent_address: String,
+    pub civil_status: String,
+    pub occupation: String,
     pub username: String,
     pub password: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisterAdminBodyWrapper {
+    pub admin: RegisterAdminBody,
 }
 
 #[derive(Serialize, FromRow)]
