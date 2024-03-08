@@ -3,7 +3,7 @@ use yew::prelude::*;
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub callback: Callback<bool>,
-    pub confirm_cb: Callback<()>,
+    pub confirm_cb: Callback<bool>,
 }
 
 #[function_component(ConfirmModal)]
@@ -18,7 +18,7 @@ pub fn confirm_modal(props: &Props) -> Html {
     let confirm_modal = {
         let ccb = props.confirm_cb.clone();
         Callback::from(move |_| {
-            ccb.emit(());
+            ccb.emit(true);
         })
     };
 
@@ -41,7 +41,7 @@ pub fn confirm_modal(props: &Props) -> Html {
                     </div>
                     <div class="p-4 md:p-5 space-y-4">
                         <p class="text-center leading-relaxed text-gray-500 dark:text-gray-400">
-                            { "Are you sure you want to delete this client?" }
+                            { "Are you sure you want to delete this?" }
                         </p>
                     </div>
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">

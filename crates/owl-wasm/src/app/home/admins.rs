@@ -33,16 +33,6 @@ pub fn admins_page() -> Html {
         resadmins.set(filtered_data);
     });
 
-    let callback_deleted = {
-        let all_admin = all_admin.clone();
-        Callback::from(move |admin_id| {
-            if let Some(mut admin) = all_admin.data.clone() {
-                admin.admins.retain(|c| c.id != admin_id);
-                all_admin.update(admin);
-            }
-        })
-    };
-
     html! {
         <div class="flex flex-col gap-5">
             <h1 class="text-2xl font-bold">{ "Admins List" }</h1>
@@ -71,7 +61,7 @@ pub fn admins_page() -> Html {
                     if !(*is_not_empty).clone() {
                         if let Some(res_data) = &all_admin.data {
                             html! {
-                                <AdminsTable admin={(*res_data).clone()} callback={callback_deleted.clone()}/>
+                                <AdminsTable admin={(*res_data).clone()} />
                             }
                         } else {
                             html! {
@@ -83,7 +73,7 @@ pub fn admins_page() -> Html {
                         }
                     } else {
                         html! {
-                            <AdminsTable admin={(*res_admins).clone()} callback={callback_deleted.clone()}/>
+                            <AdminsTable admin={(*res_admins).clone()} />
                         }
                     }
                 }

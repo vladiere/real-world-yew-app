@@ -1,14 +1,20 @@
 use yew::prelude::*;
 use yew_hooks::prelude::*;
 use yew_icons::{Icon, IconId};
+use yew_router::hooks::use_navigator;
 
 use crate::{
+    app::UserRoutes,
     components::{
         alerts::SuccessAlert,
-        home::users::{add_member_modal::AddMemberModal, members_card::MembersCard},
+        home::users::{
+            add_member_modal::AddMemberModal, delete_user_btn::DeleteUserButton,
+            members_card::MembersCard, search_member::SearchMemberComponent,
+        },
         props_error::PropsError,
     },
     services::{accounts::get_one_user, members::user_members},
+    types::AllMembersInfoWrapper,
 };
 
 #[derive(Properties, Clone, PartialEq)]
@@ -18,9 +24,20 @@ pub struct Props {
 
 #[function_component(ViewUser)]
 pub fn view_user(props: &Props) -> Html {
+    let navigator = use_navigator().unwrap();
     let id = props.user_id;
     let show_modal = use_state(|| false);
     let message = use_state(|| String::default());
+
+    let res_members = use_state(|| AllMembersInfoWrapper { members: vec![] });
+    let is_not_empty = use_state(|| false);
+
+    let resmembers = res_members.clone();
+    let isnot_empty = is_not_empty.clone();
+    let search_callback = Callback::from(move |filtered_data: AllMembersInfoWrapper| {
+        isnot_empty.set(true);
+        resmembers.set(filtered_data);
+    });
 
     let user_members = use_async_with_options(
         async move { user_members(id).await },
@@ -48,13 +65,20 @@ pub fn view_user(props: &Props) -> Html {
         })
     };
 
+    let delete_callback = Callback::from(move |_| navigator.push(&UserRoutes::UsersList));
+
     if let Some(user) = &one_user.data {
         html! {
             <div class="h-full w-full flex flex-col gap-10">
                 <SuccessAlert alert_msg={(*message).clone()} />
                 <h1 class="text-2xl font-bold">{ "Client Information details" }</h1>
                 <div class="grid gap-5 md:grid-cols-3">
-                    <img src="https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1709475853~exp=1709479453~hmac=c828619b151f43e33085076888676a6c564fe5b88e4a20baba5b94f2be13766d&w=740" alt="admin" class="rounded-lg h-52" />
+                    <div class="flex flex-col items-center justify-center gap-5">
+                        <img src="https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1709475853~exp=1709479453~hmac=c828619b151f43e33085076888676a6c564fe5b88e4a20baba5b94f2be13766d&w=740" alt="admin" class="rounded-lg h-52" />
+                        <div>
+                            <DeleteUserButton user_id={id.clone()} callback={delete_callback.clone()} />
+                        </div>
+                    </div>
                     <div class="col-span-2 grid gap-3 md:grid-cols-3 items-center">
                         <div class="flex flex-col gap-2">
                             <span class="font-bold text-8md">{ "Client ID Number: " }</span>
@@ -88,22 +112,36 @@ pub fn view_user(props: &Props) -> Html {
                         { "Add new member" }
                     </button>
                     <h1 class="text-2xl font-bold">{ "Members List" }</h1>
-                    <div class="relative">
-                        <input class="w-full h-10 pl-10 pr-5 text-sm rounded-full appearance-none focus:outline-none bg-gray-100 dark:bg-gray-800 border border-gray-100 dark:border-gray-700" placeholder="Search..." />
-                        <button class="absolute top-0 left-0 mt-3 ml-4">
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 stroke-current" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="flex flex-wrap gap-5 items-center justify-center">
                     {
-                        if let Some(members) = &user_members.data {
+                        if let Some(users) = &user_members.data {
+
                             html! {
-                                <MembersCard members={members.clone()} />
+                                <SearchMemberComponent search_user={(*users).clone()} callback={search_callback.clone()} />
                             }
                         } else {
                             html! {
-                                <PropsError errors={user_members.error.clone()} />
+                                <div class="rounded-lg text-center">
+                                    <span class="text-2xl font-medium">{ "No data available to search" }</span>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="flex flex-wrap gap-5 items-center justify-center">
+                    {
+                        if !(*is_not_empty).clone() {
+                            if let Some(members) = &user_members.data {
+                                html! {
+                                    <MembersCard members={members.clone()} />
+                                }
+                            } else {
+                                html! {
+                                    <PropsError errors={user_members.error.clone()} />
+                                }
+                            }
+                        } else {
+                            html! {
+                                <MembersCard members={(*res_members).clone()} />
                             }
                         }
                     }

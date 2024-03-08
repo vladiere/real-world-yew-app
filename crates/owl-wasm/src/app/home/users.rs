@@ -27,16 +27,6 @@ pub fn users_page() -> Html {
         resaccount.set(filtered_data);
     });
 
-    let callback_deleted = {
-        let all_users = all_users.clone();
-        Callback::from(move |user_id| {
-            if let Some(mut user) = all_users.data.clone() {
-                user.accounts.retain(|c| c.id != user_id);
-                all_users.update(user);
-            }
-        })
-    };
-
     html! {
         <div class="flex flex-col gap-5">
             <h1 class="text-2xl font-bold">{ "Users List" }</h1>
@@ -65,7 +55,7 @@ pub fn users_page() -> Html {
                     if !(*is_not_empty).clone() {
                         if let Some(res_data) = &all_users.data {
                             html! {
-                                <UsersTable data={(*res_data).clone()} callback={callback_deleted.clone()}/>
+                                <UsersTable data={(*res_data).clone()} />
                             }
                         } else {
                             html! {
@@ -77,7 +67,7 @@ pub fn users_page() -> Html {
                         }
                     } else {
                         html! {
-                            <UsersTable data={(*res_accounts).clone()} callback={callback_deleted.clone()}/>
+                            <UsersTable data={(*res_accounts).clone()} />
                         }
                     }
                 }

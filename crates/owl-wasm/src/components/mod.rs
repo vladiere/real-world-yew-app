@@ -1,6 +1,7 @@
 //! Component use by route pages.
 
 pub mod alerts;
+pub mod confirm_modal;
 pub mod home;
 pub mod list_errors;
 pub mod owl_logo;

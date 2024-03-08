@@ -2,9 +2,7 @@ use yew::prelude::*;
 use yew_hooks::prelude::*;
 use yew_icons::{Icon, IconId};
 
-use crate::{
-    components::home::users::confirm_modal::ConfirmModal, services::accounts::delete_user,
-};
+use crate::{components::confirm_modal::ConfirmModal, services::accounts::delete_user};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
@@ -14,7 +12,8 @@ pub struct Props {
 
 #[function_component(DeleteUserButton)]
 pub fn delete_user_button(props: &Props) -> Html {
-    let show_modal = use_state(|| false);
+    let btn_state = use_state(|| false);
+    let is_show = use_state(|| false);
 
     let on_remove = {
         let user_id = props.user_id.clone();
@@ -23,8 +22,24 @@ pub fn delete_user_button(props: &Props) -> Html {
 
     let onclick = {
         let on_remove = on_remove.clone();
+        let btn_state = btn_state.clone();
         Callback::from(move |_| {
             on_remove.run();
+            btn_state.set(true)
+        })
+    };
+
+    let show_modal = {
+        let is_show = is_show.clone();
+        Callback::from(move |_| {
+            is_show.set(true);
+        })
+    };
+
+    let callback_modal = {
+        let is_show = is_show.clone();
+        Callback::from(move |state| {
+            is_show.set(state);
         })
     };
 
@@ -40,25 +55,15 @@ pub fn delete_user_button(props: &Props) -> Html {
         )
     }
 
-    let show_confirm = {
-        let show_modal = show_modal.clone();
-        Callback::from(move |_| show_modal.set(true))
-    };
-
-    let modal_callback = {
-        let show_modal = show_modal.clone();
-        Callback::from(move |modal_state| show_modal.set(modal_state))
-    };
-
     html! {
         <>
-            <button class="font-medium text-red-500 dark:text-red-500" onclick={show_confirm}>
+            <button type="button" disabled={(*btn_state).clone()} class="font-medium text-red-500 dark:text-red-500" onclick={show_modal.clone()}>
                 <Icon icon_id={IconId::BootstrapTrash} width={"20px".to_owned()} height={"20px".to_owned()}/>
             </button>
             {
-                if (*show_modal).clone() {
+                if (*is_show).clone() {
                     html! {
-                        <ConfirmModal callback={modal_callback} confirm_cb={onclick} />
+                        <ConfirmModal callback={callback_modal.clone()} confirm_cb={onclick} />
                     }
                 } else {
                     html! {}

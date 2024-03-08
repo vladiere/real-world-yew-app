@@ -2,15 +2,11 @@ use yew::prelude::*;
 use yew_icons::{Icon, IconId};
 use yew_router::prelude::Link;
 
-use crate::{
-    app::AdminRoutes, components::home::admins::delete_admin_btn::DeleteButton,
-    types::AllAdminInfoWrapper,
-};
+use crate::{app::AdminRoutes, types::AllAdminInfoWrapper};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub admin: AllAdminInfoWrapper,
-    pub callback: Callback<i64>,
 }
 
 #[function_component(AdminsTable)]
@@ -60,7 +56,6 @@ pub fn admins_table(props: &Props) -> Html {
                                     <Link<AdminRoutes> to={AdminRoutes::AdminView { id: admin.id.clone() }} classes="font-medium text-green-500 dark:text-green-500">
                                         <Icon icon_id={IconId::LucideView} width={"20px".to_owned()} height={"20px".to_owned()}/>
                                     </Link<AdminRoutes>>
-                                    <DeleteButton admin_id={admin.id.clone()} callback={props.callback.clone()} />
                                 </td>
                             </tr>
                         }

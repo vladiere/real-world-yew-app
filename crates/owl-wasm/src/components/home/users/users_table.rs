@@ -2,15 +2,11 @@ use yew::prelude::*;
 use yew_icons::{Icon, IconId};
 use yew_router::prelude::Link;
 
-use crate::{
-    app::UserRoutes, components::home::users::delete_user_btn::DeleteUserButton,
-    types::AccountsInfoWrapper,
-};
+use crate::{app::UserRoutes, types::AccountsInfoWrapper};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub data: AccountsInfoWrapper,
-    pub callback: Callback<i64>,
 }
 
 #[function_component(UsersTable)]
@@ -72,7 +68,6 @@ pub fn users_table(props: &Props) -> Html {
                                     <Link<UserRoutes> to={UserRoutes::UserView { id: user.id.clone() }} classes="font-medium text-green-500 dark:text-green-500">
                                         <Icon icon_id={IconId::LucideView} width={"20px".to_owned()} height={"20px".to_owned()}/>
                                     </Link<UserRoutes>>
-                                    <DeleteUserButton user_id={user.id.clone()} callback={props.callback.clone()} />
                                 </td>
                             </tr>
                         }

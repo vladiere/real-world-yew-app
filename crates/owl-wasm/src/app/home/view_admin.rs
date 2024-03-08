@@ -2,10 +2,13 @@ use web_sys::HtmlInputElement;
 
 use yew::prelude::*;
 use yew_hooks::prelude::*;
+use yew_router::hooks::use_navigator;
 
 use crate::{
+    app::AdminRoutes,
     components::{
         alerts::{DangerAlert, SuccessAlert},
+        home::admins::delete_admin_btn::DeleteButton,
         props_error::PropsError,
     },
     services::accounts::{get_one_admin, update_one_admin},
@@ -19,6 +22,7 @@ pub struct Props {
 
 #[function_component(ViewAdmin)]
 pub fn view_admin(props: &Props) -> Html {
+    let navigator = use_navigator().unwrap();
     let id = props.admin_id;
     let update_admin = use_state(UpdateOneAdminInfo::default);
     let is_loading = use_state(|| false);
@@ -88,6 +92,8 @@ pub fn view_admin(props: &Props) -> Html {
         })
     };
 
+    let delete_callback = Callback::from(move |_state| navigator.push(&AdminRoutes::AdminsList));
+
     if let Some(admin) = &one_admin.data {
         html! {
             <div class="flex flex-col gap-5">
@@ -142,7 +148,11 @@ pub fn view_admin(props: &Props) -> Html {
                             <label for="date_enrolled" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "Email address: " }</label>
                             <input type="text" id="date_enrolled" class="outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter admin first name" required=true value={update_admin.email_address.clone()} oninput={oninput_email}/>
                         </div>
-                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{ "Save changes" }</button>
+                        <div class="flex items-center justify-between">
+                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{ "Save changes" }</button>
+                            <span class="text-2xl font-bold">{ "OR" }</span>
+                            <DeleteButton admin_id={id.clone()} callback={delete_callback.clone()} />
+                        </div>
                     </div>
                 </form>
             </div>
