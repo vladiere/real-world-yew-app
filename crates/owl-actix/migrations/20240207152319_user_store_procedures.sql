@@ -1,7 +1,7 @@
 -- Add migration script here
 
 -- delimiter //
--- create or replace procedure register_admin(
+-- CREATE OR REPLACE PROCEDURE `owl_db`.`register_admin`(
 --   in p_firstname varchar(255),
 --   in p_middlename varchar(255),
 --   in p_lastname varchar(255),
@@ -33,7 +33,7 @@
 -- delimiter ;
 --
 -- delimiter //
--- create or replace procedure register_user(
+-- CREATE OR REPLACE PROCEDURE `owl_db`.`register_user`(
 --   in p_firstname varchar(255),
 --   in p_middlename varchar(255),
 --   in p_lastname varchar(255),
@@ -57,5 +57,5 @@
 --   else
 --     select 'Account already exists' as message;
 --   end if;
--- end ;
--- delimter ;
+-- end //
+-- delimiter ;

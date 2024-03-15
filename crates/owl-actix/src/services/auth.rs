@@ -74,7 +74,7 @@ pub async fn register_admin(
 #[post("/login")]
 pub async fn login_admin(state: Data<AppState>, credentials: Json<LoginAdmin>) -> impl Responder {
     let query = "select id, username, password, token_salt from user_login where username = ?";
-    let query2 = "select role_user from user_info were id = ?";
+    let query2 = "select role_user from user_info where id = ?";
     let query3 = "insert into refresh_token (username,refresh_token) VALUES (?,?)";
     let query4 = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from admin_info_details where id = ?";
 
