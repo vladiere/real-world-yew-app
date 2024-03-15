@@ -43,3 +43,4 @@ image = "0.24"
 
 #---- Others
 futures-util = "0.3"
+sqlx-cli = "0.7"
