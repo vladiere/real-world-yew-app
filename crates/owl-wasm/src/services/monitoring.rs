@@ -1,15 +1,15 @@
 use super::request_get;
 use crate::{
     error::Error,
-    types::{MonitoringInfoWrapper, ViewMonitoringInfoWrapper},
+    types::{MonitorForSelectOneWrapper, MonitorForSelectWrapper},
 };
 
 /// GET all monitorings.
-pub async fn get_all_monitorings() -> Result<MonitoringInfoWrapper, Error> {
-    request_get("/monitoring/get".to_string()).await
+pub async fn monitoring_select() -> Result<MonitorForSelectWrapper, Error> {
+    request_get("/monitoring/all".to_string()).await
 }
 
 /// GET single monitoring.
-pub async fn get_single_monitorings(monitor_id: u32) -> Result<ViewMonitoringInfoWrapper, Error> {
-    request_get(format!("/monitoring/get?monitor_id={}", monitor_id)).await
+pub async fn monitoring_select_one(monitor_id: u32) -> Result<MonitorForSelectOneWrapper, Error> {
+    request_get(format!("/monitoring/one/{}", monitor_id)).await
 }

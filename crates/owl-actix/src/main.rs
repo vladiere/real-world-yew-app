@@ -9,6 +9,8 @@ use owl_actix::{
     admin::{
         admin::{admin_update, remove_one_admin, update_one_admin},
         admin_info::{get_admin_info, get_all_admin, get_one_admin},
+        device::{create_device, delete_device, select_devices, select_one_device, update_device},
+        monitoring::{monitor_select, monitor_select_one},
     },
     login_admin, logout_admin, register_admin, server_config,
     user::{
@@ -63,6 +65,19 @@ async fn main() -> std::io::Result<()> {
                             .service(admin_update)
                             .service(update_one_admin)
                             .service(remove_one_admin)
+                            .service(
+                                web::scope("/monitoring")
+                                    .service(monitor_select)
+                                    .service(monitor_select_one),
+                            )
+                            .service(
+                                web::scope("/device")
+                                    .service(select_devices)
+                                    .service(select_one_device)
+                                    .service(create_device)
+                                    .service(update_device)
+                                    .service(delete_device),
+                            )
                             .service(
                                 web::scope("/user")
                                     .service(get_all_user)

@@ -57,7 +57,7 @@ pub fn side_layout(props: &Props) -> Html {
     let user_ctx = use_user_context();
 
     html! {
-        <div class="flex flex-row text-gray-600 bg-gray-300 dark:bg-gray-800 dark:text-gray-200">
+        <div class="flex flex-row text-gray-600 bg-gray-300 dark:bg-gray-800 dark:text-gray-200 h-screen">
             <div class={*def_class.clone()}>
                 <div class={*def_class_arrow.clone()} onclick={set_open}>
                     <ArrowLeft />
@@ -125,7 +125,7 @@ pub fn side_layout(props: &Props) -> Html {
                     </li>
                 </ul>
             </div>
-            <div class="p-8 w-full overflow-y-scroll">
+            <div class="p-8 w-full overflow-y-scroll h-[calc(100vh-1rem)]">
                 { for props.children.iter() }
             </div>
         </div>

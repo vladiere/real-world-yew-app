@@ -4,7 +4,10 @@ use yew_router::prelude::*;
 
 use crate::{
     app::{AdminRoutes, AppRoutes},
-    components::home::admins::{admins_table::AdminsTable, search_admin::SearchComponent},
+    components::{
+        home::admins::{admins_table::AdminsTable, search_admin::SearchComponent},
+        loading::LoadingComponent,
+    },
     hooks::use_user_context,
     services::accounts::get_all_admins,
     types::AllAdminInfoWrapper,
@@ -58,18 +61,32 @@ pub fn admins_page() -> Html {
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 {
+                    if all_admin.loading {
+                        html! {
+                            <LoadingComponent />
+                        }
+                    } else {
+                        html! {}
+                    }
+                }
+                {
                     if !(*is_not_empty).clone() {
                         if let Some(res_data) = &all_admin.data {
                             html! {
                                 <AdminsTable admin={(*res_data).clone()} />
                             }
                         } else {
-                            html! {
-                                <div class="w-full h-1/4 flex flex-col items-center justify-center">
-                                    <span class="text-4xl font-bold">{ "Empty" }</span>
-                                    <span class="text-2xl font-medium">{ "No data available" }</span>
-                                </div>
-                            }
+                            // if !all_admin.loading {
+                            //     html! {
+                            //         <div class="w-full h-1/4 flex flex-col items-center justify-center">
+                            //             <span class="text-4xl font-bold">{ "Empty" }</span>
+                            //             <span class="text-2xl font-medium">{ "No data available" }</span>
+                            //         </div>
+                            //     }
+                            // } else {
+                            //     html! {}
+                            // }
+                            html! {}
                         }
                     } else {
                         html! {

@@ -1,32 +1,37 @@
-use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct MonitoringInfo {
-    pub client_number: i32,
-    pub name: String,
-    pub date: DateTime<Utc>,
-    pub door_opened: DateTime<Utc>,
-    pub door_closed: DateTime<Utc>,
+pub struct MonitorForSelect {
+    pub id: i64,
+    pub client_name: String,
+    pub building_tower: String,
+    pub building_room: String,
+    pub device_state: String,
+    pub date_begin: String,
+    pub date_modified: String,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct MonitoringInfoWrapper {
-    pub monitor: MonitoringInfo,
+pub struct MonitorForSelectWrapper {
+    pub monitors: Vec<MonitorForSelect>,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct ViewMonitoringInfo {
-    pub date: String,
-    pub time_in: DateTime<Utc>,
-    pub time_out: DateTime<Utc>,
+pub struct MonitorForSelectOne {
+    pub id: i64,
+    pub client_name: String,
+    pub building_tower: String,
+    pub building_room: String,
+    pub device_state: String,
+    pub date_begin: String,
+    pub date_modified: String,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct ViewMonitoringInfoWrapper {
-    pub views: ViewMonitoringInfo,
+pub struct MonitorForSelectOneWrapper {
+    pub monitor: MonitorForSelectOne,
 }

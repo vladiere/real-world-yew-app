@@ -28,16 +28,31 @@ pub fn search_user_component(props: &Props) -> Html {
                     .accounts
                     .iter()
                     .filter(|admin| {
-                        admin.firstname.contains(&query)
-                            || admin.middlename.contains(&query)
-                            || admin.lastname.contains(&query)
-                            || admin.email_address.contains(&query)
-                            || admin.status.contains(&query)
-                            || admin.date_enrolled.contains(&query)
-                            || admin.gender.contains(&query)
-                            || admin.tower.contains(&query)
-                            || admin.room.contains(&query)
-                            || admin.package.contains(&query)
+                        admin
+                            .firstname
+                            .to_lowercase()
+                            .contains(&query.to_lowercase())
+                            || admin
+                                .middlename
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
+                            || admin
+                                .lastname
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
+                            || admin
+                                .email_address
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
+                            || admin.status.to_lowercase().contains(&query.to_lowercase())
+                            || admin
+                                .date_enrolled
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
+                            || admin.gender.to_lowercase().contains(&query.to_lowercase())
+                            || admin.tower.to_lowercase().contains(&query.to_lowercase())
+                            || admin.room.to_lowercase().contains(&query.to_lowercase())
+                            || admin.package.to_lowercase().contains(&query.to_lowercase())
                     })
                     .cloned()
                     .collect(),

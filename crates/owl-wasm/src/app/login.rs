@@ -115,10 +115,6 @@ pub fn login_page() -> Html {
                                         </svg>
                                 }
                             </button>
-
-                            // <Link<AppRoutes> to={AppRoutes::ForgotPassword} classes="text-6md font-medium text-[#16B1BB] hover:underline hover:italic">
-                            //     { "Forgot Password?" }
-                            // </Link<AppRoutes>>
                         </div>
                     </form>
                 </div>

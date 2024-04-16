@@ -2,6 +2,7 @@
 
 mod accounts;
 mod auth;
+mod devices;
 mod errors;
 mod feedbacks;
 mod monitoring;
@@ -22,9 +23,13 @@ pub use auth::{
     AdminUpdateInfoWrapper, CurrentAdminInfo, CurrentAdminInfoWrapper, LoginInfo, LoginInfoWrapper,
     LogoutInfo, LogoutInfoWrapper, QueryReturnMessage, UserRegisterInfo, UserRegisterInfoWrapper,
 };
+pub use devices::{
+    DeviceForCreate, DeviceForCreateWrapper, DeviceForSelect, DeviceForSelectOne,
+    DeviceForSelectOneWrapper, DeviceForSelectWrapper, DeviceForUpdate, DeviceForUpdateWrapper,
+};
 pub use errors::AuthorizeErrors;
 pub use monitoring::{
-    MonitoringInfo, MonitoringInfoWrapper, ViewMonitoringInfo, ViewMonitoringInfoWrapper,
+    MonitorForSelect, MonitorForSelectOne, MonitorForSelectOneWrapper, MonitorForSelectWrapper,
 };
 pub use profile::{ProfileInfo, ProfileInfoWrapper};
 pub use reports::{ReportsInfo, ReportsInfoWrapper};

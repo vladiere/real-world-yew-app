@@ -22,7 +22,7 @@ use self::forgot_password::ForgotPassword;
 use self::home::admins::AdminsPage;
 use self::home::dashboard::DashboardPage;
 use self::home::device_add::DeviceAdd;
-use self::home::device_update::DeviceUpdate;
+use self::home::device_info::DeviceInfo;
 use self::home::devices::DevicesPage;
 use self::home::monitoring::MonitoringPage;
 use self::home::register_admin::RegisterAdmin;
@@ -70,8 +70,8 @@ pub enum DeviceRoutes {
     DevicesList,
     #[at("/devices/add")]
     DeviceRegister,
-    #[at("/devices/update")]
-    DeviceUpdate,
+    #[at("/devices/info/:id")]
+    DevicesInfo { id: i64 },
     #[not_found]
     #[at("/devices/404")]
     NotFound,
@@ -109,7 +109,7 @@ fn switch_main(route: AppRoutes) -> Html {
     match route {
         AppRoutes::Home => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <DashboardPage />
                 </div>
             </SideLayout>
@@ -118,7 +118,7 @@ fn switch_main(route: AppRoutes) -> Html {
         AppRoutes::ForgotPassword => html! { <ForgotPassword /> },
         AppRoutes::Monitoring => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <MonitoringPage />
                 </div>
             </SideLayout>
@@ -134,7 +134,7 @@ fn switch_main(route: AppRoutes) -> Html {
         }
         AppRoutes::Settings => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <SettingsPage />
                 </div>
             </SideLayout>
@@ -147,22 +147,22 @@ fn switch_device(route: DeviceRoutes) -> Html {
     match route {
         DeviceRoutes::DevicesList => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <DevicesPage />
                 </div>
             </SideLayout>
         },
         DeviceRoutes::DeviceRegister => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <DeviceAdd />
                 </div>
             </SideLayout>
         },
-        DeviceRoutes::DeviceUpdate => html! {
+        DeviceRoutes::DevicesInfo { id } => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
-                    <DeviceUpdate />
+                <div class="h-screen overflow-y-scroll">
+                    <DeviceInfo device_id={id} />
                 </div>
             </SideLayout>
         },
@@ -174,21 +174,21 @@ fn switch_user(route: UserRoutes) -> Html {
     match route {
         UserRoutes::UsersList => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <UsersPage />
                 </div>
             </SideLayout>
         },
         UserRoutes::UserView { id } => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <ViewUser user_id={id}/>
                 </div>
             </SideLayout>
         },
         UserRoutes::UserRegister => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <RegisterUser />
                 </div>
             </SideLayout>
@@ -201,21 +201,21 @@ fn switch_admin(route: AdminRoutes) -> Html {
     match route {
         AdminRoutes::AdminsList => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <AdminsPage />
                 </div>
             </SideLayout>
         },
         AdminRoutes::AdminView { id } => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <ViewAdmin admin_id={id}/>
                 </div>
             </SideLayout>
         },
         AdminRoutes::AdminRegister => html! {
             <SideLayout>
-                <div class="h-full overflow-y-scroll">
+                <div class="h-screen overflow-y-scroll">
                     <RegisterAdmin />
                 </div>
             </SideLayout>
@@ -228,7 +228,7 @@ fn switch_admin(route: AdminRoutes) -> Html {
 #[function_component(App)]
 pub fn app() -> Html {
     html! {
-        <div class="h-screen w-screen text-gray-600 bg-gray-200">
+        <div class="h-[calc(100vh-1rem)] w-screen text-gray-600 bg-gray-200">
             <BrowserRouter>
                 <UserContextProvider>
                     <Switch<AppRoutes> render={switch_main} />

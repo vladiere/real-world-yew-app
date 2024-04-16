@@ -28,11 +28,23 @@ pub fn search_member_component(props: &Props) -> Html {
                     .members
                     .iter()
                     .filter(|admin| {
-                        admin.firstname.contains(&query)
-                            || admin.middlename.contains(&query)
-                            || admin.lastname.contains(&query)
-                            || admin.date_enrolled.contains(&query)
-                            || admin.gender.contains(&query)
+                        admin
+                            .firstname
+                            .to_lowercase()
+                            .contains(&query.to_lowercase())
+                            || admin
+                                .middlename
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
+                            || admin
+                                .lastname
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
+                            || admin
+                                .date_enrolled
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
+                            || admin.gender.to_lowercase().contains(&query.to_lowercase())
                     })
                     .cloned()
                     .collect(),

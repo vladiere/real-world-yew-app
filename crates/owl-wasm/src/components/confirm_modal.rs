@@ -23,7 +23,7 @@ pub fn confirm_modal(props: &Props) -> Html {
     };
 
     html! {
-        <div class="overflow-y-auto overflow-x-hidden fixed z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="overflow-y-auto overflow-x-hidden fixed z-50 flex justify-center items-center w-full md:inset-0 h-screen max-h-full">
             <div class="h-screen w-screen absolute bg-black opacity-60">
             </div>
             <div class="relative p-4 w-full max-w-2xl max-h-full">

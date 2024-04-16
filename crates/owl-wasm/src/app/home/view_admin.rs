@@ -100,9 +100,9 @@ pub fn view_admin(props: &Props) -> Html {
                 <SuccessAlert alert_msg={(*message).clone()} />
                 <DangerAlert error={on_update.error.clone()} />
                 <h1 class="text-2xl font-bold">{ "Admin information details" }</h1>
-                <div class="grid items-center">
-                    <img src="https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1709475853~exp=1709479453~hmac=c828619b151f43e33085076888676a6c564fe5b88e4a20baba5b94f2be13766d&w=740" alt="admin" class="rounded-lg h-52" />
-                </div>
+                // <div class="grid items-center">
+                //     <img src="https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1709475853~exp=1709479453~hmac=c828619b151f43e33085076888676a6c564fe5b88e4a20baba5b94f2be13766d&w=740" alt="admin" class="rounded-lg h-52" />
+                // </div>
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "First name" }</label>
