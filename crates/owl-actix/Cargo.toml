@@ -39,7 +39,7 @@ uuid = { version = "1.6.1", features = ["v4", "fast-rng", "serde"] }
 #----File upload
 tempfile = "3.10"
 mime = "0.3"
-image = "0.24"
+image = "0"
 
 #---- Others
 futures-util = "0.3"
