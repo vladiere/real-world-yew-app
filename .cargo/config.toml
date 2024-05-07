@@ -19,6 +19,12 @@ RUST_LOG="owl_actix=debug,generate_db=debug"
 # i.e., Encryption not needed.
 
 SERVICE_DB_URL="mariadb://root:31N$t31n@localhost:3306/owl_db"
+# SERVICE_DB_URL="mariadb://root@localhost:3306/owl_db"
+DB_NAME="owl_db"
+DB_USER="root"
+DB_PASS="31N$t31n"
+DB_HOST="localhost"
+DB_PORT="3306"
 
 # SERVICE_PWD_KEY="CKUGFOD9_2Qf6Pn3ZFRYgPYb8ht4vKqEG9PGMXTB7497bT0367DjoaD6ydFnEVaIRda0kKeBZVCT5Hb62m2sCA" # For testing units
 SERVICE_PWD_KEY="qr0n_aiBIUmiCzkarDLeORnp257gQdU_T-cRjKEggRS3-7F2HA78fg1nQ3ePSagQOqSyZicCqypv9QZF2rPOKQ"

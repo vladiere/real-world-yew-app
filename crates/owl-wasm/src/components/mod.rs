@@ -3,6 +3,7 @@
 pub mod alerts;
 pub mod confirm_modal;
 pub mod home;
+pub mod home_view;
 pub mod list_errors;
 pub mod loading;
 pub mod owl_logo;

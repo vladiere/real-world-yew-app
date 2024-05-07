@@ -12,6 +12,7 @@ use crate::{
     admin::{
         AdminsInfo, AdminsInfoWrapper, CurrentAdminInfo, CurrentAdminInfoWithToken,
         CurrentAdminInfoWrapper, OneAdminInfo, OneAdminInfoWrapper,
+        DashboardCount, DashboardCountWrapper,
     },
     server_config, AdminContext, AppState, ErrorStatus, TokenClaims,
 };
@@ -22,7 +23,7 @@ pub async fn get_admin_info(state: Data<AppState>, ctx: AdminContext) -> impl Re
     let query = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from admin_info_details where id = ?";
 
     let jwt_secret: Hmac<Sha256> =
-        Hmac::new_from_slice(&server_config().JWT_SECRET.as_bytes()).unwrap();
+        Hmac::new_from_slice(server_config().JWT_SECRET.as_bytes()).unwrap();
 
     debug!("{:<12} - get_admin_info", "HANDLER");
     match sqlx::query_as::<_, CurrentAdminInfo>(query)
@@ -106,6 +107,42 @@ pub async fn get_all_admin(state: Data<AppState>, ctx: AdminContext) -> impl Res
         }
         Err(error) => {
             debug!("{:<12} - query error on get_all_admin: {error:?}", "ERROR");
+            let error = ErrorStatus {
+                message: format!("{error:?}"),
+                status: 500,
+            };
+            HttpResponse::InternalServerError().json(error)
+        }
+    }
+}
+
+#[get("/dashboard")]
+pub async fn get_dashboard_data(state: Data<AppState>) -> impl Responder {
+    let query = r#"
+        SELECT
+            user_count.active_users,
+            admin_count.admins,
+            device_count.total_devices,
+            monitor_count.monitors
+        FROM
+            (SELECT COUNT(*) AS active_users FROM user_info WHERE role_user = 'User' AND status = 'Active') AS user_count,
+            (SELECT COUNT(*) AS admins FROM user_info WHERE role_user = 'Admin' AND status = 'Active') AS admin_count,
+            (SELECT COUNT(*) AS total_devices FROM device_info) AS device_count,
+            (SELECT COUNT(*) AS monitors FROM monitoring_table WHERE monitor_state = 'Opened') AS monitor_count;
+        "#;
+    
+    debug!("{:<12} - get_dashboard_data","HANDLER");
+
+    match sqlx::query_as::<_, DashboardCount>(query)
+        .fetch_one(&state.db)
+        .await
+    {
+        Ok(data) => {
+            let dashboard_counts = DashboardCountWrapper { data };
+            HttpResponse::Ok().json(dashboard_counts)
+        },
+        Err(error) => {
+            debug!("{:<12} - query error on get_dashboard_data: {error:?}", "ERROR");
             let error = ErrorStatus {
                 message: format!("{error:?}"),
                 status: 500,

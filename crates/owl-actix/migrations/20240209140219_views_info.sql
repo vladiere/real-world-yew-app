@@ -38,6 +38,7 @@ select
     `b`.`tower` as `tower`,
     `b`.`room` as `room`,
     `b`.`package` as `package`,
+    `ui`.`status` as `status`,
     date_format(`ui`.`ctime`, '%M %e, %Y') as `date_enrolled`
 from
     (`user_info` `ui`

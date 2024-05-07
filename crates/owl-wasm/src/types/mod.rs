@@ -32,7 +32,7 @@ pub use monitoring::{
     MonitorForSelect, MonitorForSelectOne, MonitorForSelectOneWrapper, MonitorForSelectWrapper,
 };
 pub use profile::{ProfileInfo, ProfileInfoWrapper};
-pub use reports::{ReportsInfo, ReportsInfoWrapper};
+pub use reports::{DashboardCount, DashboardCountWrapper, ReportsInfo, ReportsInfoWrapper};
 
 /// OWL api error info for Unprocessable Entity error
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]

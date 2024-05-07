@@ -8,7 +8,7 @@ use actix_web_httpauth::middleware::HttpAuthentication;
 use owl_actix::{
     admin::{
         admin::{admin_update, remove_one_admin, update_one_admin},
-        admin_info::{get_admin_info, get_all_admin, get_one_admin},
+        admin_info::{get_admin_info, get_all_admin, get_dashboard_data, get_one_admin},
         device::{create_device, delete_device, select_devices, select_one_device, update_device},
         monitoring::{monitor_select, monitor_select_one},
     },
@@ -31,10 +31,9 @@ async fn main() -> std::io::Result<()> {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
-    let db_url = &server_config().DB_URL;
     let pool = MySqlPoolOptions::new()
         .max_connections(5)
-        .connect(db_url)
+        .connect(&server_config().DB_URL)
         .await
         .expect("Error builing a connection pool");
 
@@ -57,6 +56,7 @@ async fn main() -> std::io::Result<()> {
                     web::scope("/admin").service(login_admin).service(
                         web::scope("")
                             .wrap(bearer_middleware)
+                            .service(get_dashboard_data)
                             .service(get_admin_info)
                             .service(get_all_admin)
                             .service(get_one_admin)
@@ -108,5 +108,5 @@ async fn greet(name: web::Path<String>) -> impl Responder {
 
 #[get("/api/test")]
 async fn auth_get() -> impl Responder {
-    format!("Authenticated")
+    "Authenticated".to_string()
 }
