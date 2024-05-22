@@ -16,14 +16,14 @@ use crate::{
 pub async fn monitor_select(state: Data<AppState>) -> impl Responder {
     debug!("{:<12} - monitor_select", "HANDLER");
 
-    let query = "select id, client_name, building_tower, building_room, monitor_state, date_format(ctime,'%M %e, %Y') as date_begin,  date_format(mtime,'%M %e, %Y') as date_modified order by mtime asc";
+    let query = "select id, client_name, building_tower, building_room, monitor_state, date_format(ctime,'%M %e, %Y') as date_begin,  date_format(mtime,'%M %e, %Y') as date_modified from monitoring_table order by mtime asc";
 
     match sqlx::query_as::<_, MonitorForSelect>(query)
         .fetch_all(&state.db)
         .await
     {
         Ok(monitors) => {
-            let res = MonitorForSelectWrapper { monitor: monitors };
+            let res = MonitorForSelectWrapper { monitors };
             HttpResponse::Ok().json(res)
         }
         Err(error) => {

@@ -59,7 +59,7 @@ pub async fn register_user(
 pub async fn remove_one_user(state: Data<AppState>, id: Path<i64>) -> impl Responder {
     debug!("{:<12} - remove_user", "HANDLER");
 
-    let query = "update user_info set status = 'Inactive' where id = ?";
+    let query = "update user_info set status = 'Removed' where id = ?";
     match sqlx::query(query).bind(*id).execute(&state.db).await {
         Ok(_) => {
             let res = QueryReturnMessage {

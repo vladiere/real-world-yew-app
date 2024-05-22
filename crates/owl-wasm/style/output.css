@@ -763,6 +763,10 @@ video {
   height: 1.5rem;
 }
 
+.h-64 {
+  height: 16rem;
+}
+
 .h-8 {
   height: 2rem;
 }
@@ -785,10 +789,6 @@ video {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-64 {
-  height: 16rem;
 }
 
 .max-h-full {
@@ -1230,6 +1230,11 @@ video {
 .bg-yellow-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 179 8 / var(--tw-bg-opacity));
 }
 
 .fill-blue-600 {

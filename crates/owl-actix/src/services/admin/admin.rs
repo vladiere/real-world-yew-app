@@ -113,7 +113,7 @@ pub async fn admin_update(
 
 #[delete("/remove/{id}")]
 pub async fn remove_one_admin(state: Data<AppState>, id: Path<i64>) -> impl Responder {
-    let query = "update user_info set status = 'Inactive' where id = ?";
+    let query = "update user_info set status = 'Removed' where id = ?";
 
     debug!("{:<12} - remove_one_admin", "HANDLER");
 

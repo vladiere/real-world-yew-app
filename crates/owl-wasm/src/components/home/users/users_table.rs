@@ -2,7 +2,9 @@ use yew::prelude::*;
 use yew_icons::{Icon, IconId};
 use yew_router::prelude::Link;
 
-use crate::{app::UserRoutes, types::AccountsInfoWrapper};
+use crate::{
+    app::UserRoutes, components::status_component::StatusComponent, types::AccountsInfoWrapper,
+};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
@@ -62,7 +64,7 @@ pub fn users_table(props: &Props) -> Html {
                                     { &user.date_enrolled }
                                 </td>
                                 <td class="px-6 py-4">
-                                    { &user.status }
+                                    <StatusComponent stats={(*user.status).to_string()} />
                                 </td>
                                 <td class="px-6 py-4 text-right flex gap-5">
                                     <Link<UserRoutes> to={UserRoutes::UserView { id: user.id.clone() }} classes="font-medium text-green-500 dark:text-green-500">

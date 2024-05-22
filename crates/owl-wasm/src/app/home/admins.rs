@@ -76,16 +76,6 @@ pub fn admins_page() -> Html {
                                 <AdminsTable admin={(*res_data).clone()} />
                             }
                         } else {
-                            // if !all_admin.loading {
-                            //     html! {
-                            //         <div class="w-full h-1/4 flex flex-col items-center justify-center">
-                            //             <span class="text-4xl font-bold">{ "Empty" }</span>
-                            //             <span class="text-2xl font-medium">{ "No data available" }</span>
-                            //         </div>
-                            //     }
-                            // } else {
-                            //     html! {}
-                            // }
                             html! {}
                         }
                     } else {

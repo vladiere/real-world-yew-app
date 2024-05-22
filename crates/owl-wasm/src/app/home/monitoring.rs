@@ -35,9 +35,9 @@ pub fn monitoring_page() -> Html {
                 </div>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     {
-                        if *is_not_empty.clone() {
+                        if !(*is_not_empty).clone() {
                             html! {
-                                <MonitoringTable data={(*monitorings).clone()} />
+                                <MonitoringTable data={(*data).clone()} />
                             }
                         } else {
                             html! {

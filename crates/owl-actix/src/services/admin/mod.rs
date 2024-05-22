@@ -23,7 +23,7 @@ pub struct CurrentAdminInfo {
 pub struct DashboardCount {
     pub active_users: i64,
     pub admins: i64,
-    pub total_devices: i64, 
+    pub total_devices: i64,
     pub monitors: i64,
 }
 
@@ -193,7 +193,7 @@ pub struct MonitorForSelect {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct MonitorForSelectWrapper {
-    pub monitor: Vec<MonitorForSelect>,
+    pub monitors: Vec<MonitorForSelect>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -321,6 +321,11 @@ impl FromRow<'_, MySqlRow> for AdminsInfo {
 
 impl FromRow<'_, MySqlRow> for DashboardCount {
     fn from_row(row: &'_ MySqlRow) -> Result<Self, sqlx::Error> {
-        Ok(Self { active_users: row.try_get(0)?, admins: row.try_get(1)?, total_devices: row.try_get(2)?, monitors: row.try_get(3)? })
+        Ok(Self {
+            active_users: row.try_get(0)?,
+            admins: row.try_get(1)?,
+            total_devices: row.try_get(2)?,
+            monitors: row.try_get(3)?,
+        })
     }
 }

@@ -2,7 +2,9 @@ use yew::prelude::*;
 use yew_icons::{Icon, IconId};
 use yew_router::prelude::Link;
 
-use crate::{app::AdminRoutes, types::AllAdminInfoWrapper};
+use crate::{
+    app::AdminRoutes, components::status_component::StatusComponent, types::AllAdminInfoWrapper,
+};
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
@@ -50,7 +52,7 @@ pub fn admins_table(props: &Props) -> Html {
                                     { &admin.date_enrolled }
                                 </td>
                                 <td class="px-6 py-4 capitalize">
-                                    { &admin.status }
+                                    <StatusComponent stats={(*admin.status).to_string()} />
                                 </td>
                                 <td class="px-6 py-4 text-right flex gap-5">
                                     <Link<AdminRoutes> to={AdminRoutes::AdminView { id: admin.id.clone() }} classes="font-medium text-green-500 dark:text-green-500">

@@ -69,7 +69,7 @@ pub async fn user_members(state: Data<AppState>, id: Path<i64>) -> impl Responde
 pub async fn get_all_user(state: Data<AppState>) -> impl Responder {
     debug!("{:<12} - get_all_user", "HANDLER");
 
-    let query = "select id, firstname, middlename, lastname, email_address, gender, tower, room, package, date_enrolled, status from user_info_details where role_user = 'User' and status != 'Inactive' order by date_enrolled desc";
+    let query = "select id, firstname, middlename, lastname, email_address, gender, tower, room, package, date_enrolled, status from user_info_details where role_user = 'User' and status != 'Removed' order by date_enrolled desc";
 
     match sqlx::query_as::<_, AccountsInfo>(query)
         .fetch_all(&state.db)

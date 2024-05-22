@@ -6,10 +6,10 @@ use crate::{
 
 /// GET all monitorings.
 pub async fn monitoring_select() -> Result<MonitorForSelectWrapper, Error> {
-    request_get("/monitoring/all".to_string()).await
+    request_get("/admin/monitoring/all".to_string()).await
 }
 
 /// GET single monitoring.
 pub async fn monitoring_select_one(monitor_id: u32) -> Result<MonitorForSelectOneWrapper, Error> {
-    request_get(format!("/monitoring/one/{}", monitor_id)).await
+    request_get(format!("/admin/monitoring/one/{}", monitor_id)).await
 }

@@ -11,8 +11,8 @@ use tracing::debug;
 use crate::{
     admin::{
         AdminsInfo, AdminsInfoWrapper, CurrentAdminInfo, CurrentAdminInfoWithToken,
-        CurrentAdminInfoWrapper, OneAdminInfo, OneAdminInfoWrapper,
-        DashboardCount, DashboardCountWrapper,
+        CurrentAdminInfoWrapper, DashboardCount, DashboardCountWrapper, OneAdminInfo,
+        OneAdminInfoWrapper,
     },
     server_config, AdminContext, AppState, ErrorStatus, TokenClaims,
 };
@@ -92,7 +92,7 @@ pub async fn get_one_admin(state: Data<AppState>, id: Path<i64>) -> impl Respond
 
 #[get("/all")]
 pub async fn get_all_admin(state: Data<AppState>, ctx: AdminContext) -> impl Responder {
-    let query = "select id, firstname, middlename, lastname, email_address, username, date_enrolled, status from admin_info_details where id != ? and role_user = 'Admin' and status != 'Inactive'";
+    let query = "select id, firstname, middlename, lastname, email_address, username, date_enrolled, status from admin_info_details where id != ? and role_user = 'Admin' and status != 'Removed'";
 
     debug!("{:<12} - get_all_admin", "HANDLER");
 
@@ -130,8 +130,8 @@ pub async fn get_dashboard_data(state: Data<AppState>) -> impl Responder {
             (SELECT COUNT(*) AS total_devices FROM device_info) AS device_count,
             (SELECT COUNT(*) AS monitors FROM monitoring_table WHERE monitor_state = 'Opened') AS monitor_count;
         "#;
-    
-    debug!("{:<12} - get_dashboard_data","HANDLER");
+
+    debug!("{:<12} - get_dashboard_data", "HANDLER");
 
     match sqlx::query_as::<_, DashboardCount>(query)
         .fetch_one(&state.db)
@@ -140,9 +140,12 @@ pub async fn get_dashboard_data(state: Data<AppState>) -> impl Responder {
         Ok(data) => {
             let dashboard_counts = DashboardCountWrapper { data };
             HttpResponse::Ok().json(dashboard_counts)
-        },
+        }
         Err(error) => {
-            debug!("{:<12} - query error on get_dashboard_data: {error:?}", "ERROR");
+            debug!(
+                "{:<12} - query error on get_dashboard_data: {error:?}",
+                "ERROR"
+            );
             let error = ErrorStatus {
                 message: format!("{error:?}"),
                 status: 500,

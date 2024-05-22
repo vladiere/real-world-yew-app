@@ -60,16 +60,16 @@ async fn main() -> std::io::Result<()> {
                             .service(get_admin_info)
                             .service(get_all_admin)
                             .service(get_one_admin)
-                            .service(logout_admin)
-                            .service(register_admin)
-                            .service(admin_update)
-                            .service(update_one_admin)
-                            .service(remove_one_admin)
                             .service(
                                 web::scope("/monitoring")
                                     .service(monitor_select)
                                     .service(monitor_select_one),
                             )
+                            .service(logout_admin)
+                            .service(register_admin)
+                            .service(admin_update)
+                            .service(update_one_admin)
+                            .service(remove_one_admin)
                             .service(
                                 web::scope("/device")
                                     .service(select_devices)

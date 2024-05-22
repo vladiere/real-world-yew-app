@@ -8,4 +8,5 @@ pub mod list_errors;
 pub mod loading;
 pub mod owl_logo;
 pub mod props_error;
+pub mod status_component;
 pub mod user_context_provider;

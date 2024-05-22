@@ -30,7 +30,7 @@ CREATE TABLE user_info (
   civil_status ENUM('Single','Married','Divorced','Widowed','Separate') NOT NULL DEFAULT 'Single',
   gender ENUM('Male','Female','Other') NOT NULL DEFAULT 'Male',
   occupation VARCHAR(255) NOT NULL,
-  status enum('Active', 'Inactive') NOT NULL DEFAULT 'Active',
+  status enum('Active', 'Inactive', 'Removed') NOT NULL DEFAULT 'Active',
   ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   mtime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
