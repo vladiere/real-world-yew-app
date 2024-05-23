@@ -23,9 +23,9 @@ pub fn users_table(props: &Props) -> Html {
                     <th scope="col" class="px-6 py-3">{ "Fullname" }</th>
                     <th scope="col" class="px-6 py-3">{ "Email Address" }</th>
                     <th scope="col" class="px-6 py-3">{ "Gender" }</th>
-                    <th scope="col" class="px-6 py-3">{ "Tower" }</th>
-                    <th scope="col" class="px-6 py-3">{ "Room" }</th>
-                    <th scope="col" class="px-6 py-3">{ "Package" }</th>
+                    <th scope="col" class="px-6 py-3">{ "Building" }</th>
+                    <th scope="col" class="px-6 py-3">{ "Unit" }</th>
+                    // <th scope="col" class="px-6 py-3">{ "Package" }</th>
                     <th scope="col" class="px-6 py-3">{ "Date Enrolled" }</th>
                     <th scope="col" class="px-6 py-3">{ "Status" }</th>
                     <th scope="col" class="px-3 py-3">
@@ -57,9 +57,9 @@ pub fn users_table(props: &Props) -> Html {
                                 <td class="px-6 py-4">
                                     { &user.room }
                                 </td>
-                                <td class="px-6 py-4">
-                                    { &user.package }
-                                </td>
+                                // <td class="px-6 py-4">
+                                //     { &user.package }
+                                // </td>
                                 <td class="px-6 py-4">
                                     { &user.date_enrolled }
                                 </td>

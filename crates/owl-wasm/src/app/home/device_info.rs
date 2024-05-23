@@ -101,15 +101,15 @@ pub fn device_info(props: &Props) -> Html {
                                         <input class="text-8md text-medium focus:outline-none bg-transparent uppercase border border-gray-200 dark:border-gray-600 p-2" value={data.device.device_name.clone()} readonly=true />
                                     </div>
                                     <div class="flex flex-col">
-                                        <p class="text-4md text-bold text-gray-400 capitalize">{ "Device Tower" }</p>
+                                        <p class="text-4md text-bold text-gray-400 capitalize">{ "Device Building" }</p>
                                         <input class="text-8md text-medium focus:outline-none bg-transparent uppercase border border-gray-200 dark:border-gray-600 p-2" value={data.device.device_tower.clone()} readonly=true />
                                     </div>
                                     <div class="flex flex-col">
-                                        <p class="text-4md text-bold text-gray-400 capitalize">{ "Device Room" }</p>
+                                        <p class="text-4md text-bold text-gray-400 capitalize">{ "Device Unit" }</p>
                                         <input class="text-8md text-medium focus:outline-none bg-transparent uppercase border border-gray-200 dark:border-gray-600 p-2" value={data.device.device_room.clone()} readonly=true />
                                     </div>
                                     <div class="flex flex-col">
-                                        <p class="text-4md text-bold text-gray-400 capitalize">{ "Device Name" }{ data.device.device_state.clone() }</p>
+                                        <p class="text-4md text-bold text-gray-400 capitalize">{ "Device State" }</p>
                                         {
                                             if *input_state.clone() {
                                                 html! {

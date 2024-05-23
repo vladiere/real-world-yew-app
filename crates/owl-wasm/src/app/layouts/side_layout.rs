@@ -42,7 +42,7 @@ pub fn side_layout(props: &Props) -> Html {
                     .set("h-screen p-4 pt-8 relative duration-200 w-20 border-r border-slate-400 dark:border-slate-700");
                 def_class_arrow.set("bg-slate-700 w-[25px] rounded-full absolute -right-3 top-9 border border-[#16B1BB] cursor-pointer rotate-180");
                 h1_class.set("text-8md origin-left font-medium uppercase duration-300 scale-0");
-                span_class.set("text-base font-medium flex-1 duration-300 scale-0");
+                span_class.set("text-base font-medium flex-1 duration-300 scale-0 hidden");
             } else {
                 open_state.set(true);
                 def_class
@@ -80,7 +80,7 @@ pub fn side_layout(props: &Props) -> Html {
                             <span class="text-2xl block float-left">
                                 <Icon icon_id={IconId::FontAwesomeSolidUsers} width={"28px".to_owned()} height={"28px".to_owned()} />
                             </span>
-                            <span class={*span_class.clone()}>{ "Users" }</span>
+                            <span class={*span_class.clone()}>{ "Clinet's Profile Mngt." }</span>
                         </Link<UserRoutes>>
                     </li>
                     {
