@@ -21,6 +21,8 @@ DROP TABLE IF EXISTS feedbacks;
 -- Create user_info table
 CREATE TABLE user_info (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id VARCHAR(255) UNIQUE,
+
   role_user ENUM('Admin', 'Super', 'User') NOT NULL DEFAULT 'Admin',
   firstname VARCHAR(255) NOT NULL,
   middlename VARCHAR(255) NOT NULL,
@@ -50,7 +52,9 @@ CREATE TABLE user_login (
 -- Create building table
 CREATE TABLE building (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  building_id VARCHAR(255) UNIQUE,
   user_id BIGINT NOT NULL,
+
   tower VARCHAR(255) NOT NULL,
   room VARCHAR(255) NOT NULL,
   package ENUM('Standard','Vip','Vvip','Business','Family','Romance','Extended','Inclusive') NOT NULL DEFAULT 'Standard',

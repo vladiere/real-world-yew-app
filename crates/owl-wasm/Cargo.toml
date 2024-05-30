@@ -35,6 +35,9 @@ features = [
   "HtmlCollection",
   "HtmlInputElement",
   "HtmlSelectElement",
+  "File",
+  "DragEvent",
+  "DataTransfer"
 ]
 
 [dependencies.yew_icons]
@@ -55,6 +58,7 @@ features = [
   "FontAwesomeSolidUserPlus",
   "BootstrapPlusCircle",
   "FeatherPlus",
+  "FeatherEdit",
   "FeatherEdit",
   "BootstrapNodePlusFill",
 ]

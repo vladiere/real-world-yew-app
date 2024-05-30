@@ -3,6 +3,8 @@ pub mod dashboard;
 pub mod device_add;
 pub mod device_info;
 pub mod devices;
+pub mod edit_image;
+pub mod member_add;
 pub mod monitoring;
 pub mod register_admin;
 pub mod register_user;

@@ -49,21 +49,21 @@ pub fn view_user(props: &Props) -> Html {
         UseAsyncOptions::enable_auto(),
     );
 
-    // let is_show_modal = {
-    //     let show_modal = show_modal.clone();
-    //     Callback::from(move |_| {
-    //         show_modal.set(true);
-    //     })
-    // };
+    let is_show_modal = {
+        let show_modal = show_modal.clone();
+        Callback::from(move |_| {
+            show_modal.set(true);
+        })
+    };
 
-    // let modal_callback = {
-    //     let show_modal = show_modal.clone();
-    //     let message = message.clone();
-    //     Callback::from(move |(modal_state, msg)| {
-    //         message.set(msg);
-    //         show_modal.set(modal_state);
-    //     })
-    // };
+    let modal_callback = {
+        let show_modal = show_modal.clone();
+        let message = message.clone();
+        Callback::from(move |(modal_state, msg)| {
+            message.set(msg);
+            show_modal.set(modal_state);
+        })
+    };
 
     let delete_callback = Callback::from(move |_| navigator.push(&UserRoutes::UsersList));
 
@@ -81,7 +81,7 @@ pub fn view_user(props: &Props) -> Html {
                     </div>
                     <div class="col-span-2 grid gap-3 md:grid-cols-3 items-center">
                         <div class="flex flex-col gap-2">
-                            <span class="font-bold text-8md">{ "Client ID Number: " }</span>
+                            <span class="font-bold text-8md">{ "Client ID: " }</span>
                             <span class="font-bold text-8md">{ "Fullname: " }</span>
                             <span class="font-bold text-8md">{ "Recent Address: " }</span>
                             <span class="font-bold text-8md">{ "Gender: " }</span>
@@ -93,7 +93,7 @@ pub fn view_user(props: &Props) -> Html {
                             <span class="font-bold text-8md">{ "Date Enrolled: " }</span>
                         </div>
                         <div class="col-span-2 flex flex-col gap-2">
-                            <span class="font-medium text-4md">{ id }</span>
+                            <span class="font-medium text-4md">{ user.account.user_id.clone() }</span>
                             <span class="font-medium text-4md capitalize">{ format!("{}, {} {}.", user.account.lastname.clone(), user.account.firstname.clone(), user.account.middlename.clone().chars().next().unwrap_or_default()) }</span>
                             <span class="font-medium text-4md capitalize">{ user.account.recent_address.clone() }</span>
                             <span class="font-medium text-4md">{ user.account.gender.clone() }</span>
@@ -106,55 +106,55 @@ pub fn view_user(props: &Props) -> Html {
                         </div>
                     </div>
                 </div>
-            //     <div class="flex justify-between">
-            //         <button class="flex items-center gap-2 middle none center mr-4 rounded-lg bg-green-500 py-3 px-5 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" onclick={is_show_modal} >
-            //             <Icon icon_id={IconId::FontAwesomeSolidUserPlus} width={"20px".to_owned()} height={"20px".to_owned()}/>
-            //             { "Add new member" }
-            //         </button>
-            //         <h1 class="text-2xl font-bold">{ "Members List" }</h1>
-            //         {
-            //             if let Some(users) = &user_members.data {
-            //
-            //                 html! {
-            //                     <SearchMemberComponent search_user={(*users).clone()} callback={search_callback.clone()} />
-            //                 }
-            //             } else {
-            //                 html! {
-            //                     <div class="rounded-lg text-center">
-            //                         <span class="text-2xl font-medium">{ "No data available to search" }</span>
-            //                     </div>
-            //                 }
-            //             }
-            //         }
-            //     </div>
-            //     <div class="flex flex-wrap gap-5 items-center justify-center">
-            //         {
-            //             if !(*is_not_empty).clone() {
-            //                 if let Some(members) = &user_members.data {
-            //                     html! {
-            //                         <MembersCard members={members.clone()} />
-            //                     }
-            //                 } else {
-            //                     html! {
-            //                         <PropsError errors={user_members.error.clone()} />
-            //                     }
-            //                 }
-            //             } else {
-            //                 html! {
-            //                     <MembersCard members={(*res_members).clone()} />
-            //                 }
-            //             }
-            //         }
-            //     </div>
-            //     {
-            //         if (*show_modal).clone() {
-            //             html! {
-            //                 <AddMemberModal client_id={id.clone()} callback={modal_callback} />
-            //             }
-            //         } else {
-            //             html! {}
-            //         }
-            //     }
+                <div class="flex justify-between">
+                    <button class="flex items-center gap-2 middle none center mr-4 rounded-lg bg-green-500 py-3 px-5 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" onclick={is_show_modal} >
+                        <Icon icon_id={IconId::FontAwesomeSolidUserPlus} width={"20px".to_owned()} height={"20px".to_owned()}/>
+                        { "Add new member" }
+                    </button>
+                    <h1 class="text-2xl font-bold">{ "Members List" }</h1>
+                    {
+                        if let Some(users) = &user_members.data {
+
+                            html! {
+                                <SearchMemberComponent search_user={(*users).clone()} callback={search_callback.clone()} />
+                            }
+                        } else {
+                            html! {
+                                <div class="rounded-lg text-center">
+                                    <span class="text-2xl font-medium">{ "No data available to search" }</span>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="flex flex-wrap gap-5 items-center justify-center">
+                    {
+                        if !(*is_not_empty).clone() {
+                            if let Some(members) = &user_members.data {
+                                html! {
+                                    <MembersCard members={members.clone()} />
+                                }
+                            } else {
+                                html! {
+                                    <PropsError errors={user_members.error.clone()} />
+                                }
+                            }
+                        } else {
+                            html! {
+                                <MembersCard members={(*res_members).clone()} />
+                            }
+                        }
+                    }
+                </div>
+                {
+                    if (*show_modal).clone() {
+                        html! {
+                            <AddMemberModal client_id={id.clone()} callback={modal_callback} />
+                        }
+                    } else {
+                        html! {}
+                    }
+                }
             </div>
         }
     } else {

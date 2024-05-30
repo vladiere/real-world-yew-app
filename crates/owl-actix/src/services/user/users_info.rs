@@ -15,7 +15,7 @@ use crate::{
 
 #[get("/{id}")]
 pub async fn get_one_user(state: Data<AppState>, id: Path<i64>) -> impl Responder {
-    let query = "select firstname, middlename, lastname, email_address, gender, recent_address, civil_status, occupation, tower, room, package, date_enrolled from user_info_details where role_user = 'User' and id = ?";
+    let query = "select firstname, middlename, lastname, email_address, gender, recent_address, civil_status, occupation, tower, room, package, date_enrolled, user_id from user_info_details where role_user = 'User' and id = ?";
 
     debug!("{:<12} - get_one_user", "HANDLER");
 
@@ -43,7 +43,7 @@ pub async fn get_one_user(state: Data<AppState>, id: Path<i64>) -> impl Responde
 pub async fn user_members(state: Data<AppState>, id: Path<i64>) -> impl Responder {
     debug!("{:<12} - user_members", "HANDLER");
 
-    let query = "select id, firstname, middlename, lastname, age, gender, date_format(ctime, '%M %e, %Y') as date_enrolled from members_table where user_id = ? and status = 'Active' order by ctime desc";
+    let query = "select id, firstname, middlename, lastname, age, gender, date_format(ctime, '%M %e, %Y') as date_enrolled, member_id from members_table where user_id = ? and status = 'Active' order by ctime desc";
 
     match sqlx::query_as::<_, AllMembersInfo>(query)
         .bind(*id)
@@ -69,7 +69,7 @@ pub async fn user_members(state: Data<AppState>, id: Path<i64>) -> impl Responde
 pub async fn get_all_user(state: Data<AppState>) -> impl Responder {
     debug!("{:<12} - get_all_user", "HANDLER");
 
-    let query = "select id, firstname, middlename, lastname, email_address, gender, tower, room, package, date_enrolled, status from user_info_details where role_user = 'User' and status != 'Removed' order by date_enrolled desc";
+    let query = "select id, firstname, middlename, lastname, email_address, gender, tower, room, package, date_enrolled, status, user_id from user_info_details where role_user = 'User' and status != 'Removed' order by date_enrolled desc";
 
     match sqlx::query_as::<_, AccountsInfo>(query)
         .fetch_all(&state.db)

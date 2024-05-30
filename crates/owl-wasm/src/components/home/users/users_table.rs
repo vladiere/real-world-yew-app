@@ -40,7 +40,7 @@ pub fn users_table(props: &Props) -> Html {
                         html! {
                             <tr class="bg-white border-b bg-gray-400 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    { &user.id }
+                                    { &user.user_id }
                                 </th>
                                 <td class="px-6 py-4 capitalize">
                                     { format!("{}, {} {}.", &user.lastname, &user.firstname, &user.middlename.chars().next().unwrap_or_default()) }

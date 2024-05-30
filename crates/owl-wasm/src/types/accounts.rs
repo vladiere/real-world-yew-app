@@ -33,6 +33,7 @@ pub struct AllAdminInfo {
     pub username: String,
     pub date_enrolled: String,
     pub status: String,
+    pub user_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Default)]
@@ -55,6 +56,7 @@ pub struct OneAdminInfo {
     pub username: String,
     pub date_enrolled: String,
     pub status: String,
+    pub user_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -91,6 +93,7 @@ pub struct AccountsInfo {
     pub package: String,
     pub date_enrolled: String,
     pub status: String,
+    pub user_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq, Default)]
@@ -114,6 +117,7 @@ pub struct OneAccountInfo {
     pub room: String,
     pub package: String,
     pub date_enrolled: String,
+    pub user_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -131,6 +135,7 @@ pub struct MemberInfo {
     pub gender: String,
     pub age: i64,
     pub user_id: i64,
+    pub member_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -149,10 +154,19 @@ pub struct AllMembersInfo {
     pub age: i64,
     pub gender: String,
     pub date_enrolled: String,
+    pub member_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct AllMembersInfoWrapper {
     pub members: Vec<AllMembersInfo>,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct FileDetails {
+    pub name: String,
+    pub file_type: String,
+    pub data: Vec<u8>,
 }

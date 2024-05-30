@@ -13,7 +13,7 @@ use uuid::Uuid;
 use crate::{
     admin::{CurrentAdminInfo, CurrentAdminInfoWithToken, CurrentAdminInfoWrapper},
     appstate::AppState,
-    server_config, AuthAdmin, LogoutInfoId, LogoutInfoWrapper, QueryReturnMessage,
+    b32_hex, server_config, AuthAdmin, LogoutInfoId, LogoutInfoWrapper, QueryReturnMessage,
     RegisterAdminBodyWrapper, RoleUser,
 };
 use crate::{middleware::TokenClaims, ErrorStatus, LoginAdmin};
@@ -24,7 +24,7 @@ pub async fn register_admin(
     body: Json<RegisterAdminBodyWrapper>,
 ) -> impl Responder {
     let user: RegisterAdminBodyWrapper = body.into_inner();
-    let query = "CALL register_admin(?,?,?,?,?,?,?,?,?,?,?,?);";
+    let query = "CALL register_admin(?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
     debug!(
         "{:<12} - register_admin: {}",
@@ -51,6 +51,10 @@ pub async fn register_admin(
         .bind(hash)
         .bind(Uuid::new_v4().to_string())
         .bind(Uuid::new_v4().to_string())
+        .bind(match b32_hex() {
+            Ok(val) => val,
+            Err(_) => String::from("Null"),
+        })
         .execute(&state.db)
         .await
     {

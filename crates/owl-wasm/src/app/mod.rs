@@ -24,6 +24,8 @@ use self::home::dashboard::DashboardPage;
 use self::home::device_add::DeviceAdd;
 use self::home::device_info::DeviceInfo;
 use self::home::devices::DevicesPage;
+use self::home::edit_image::EditImage;
+use self::home::member_add::MemberAdd;
 use self::home::monitoring::MonitoringPage;
 use self::home::register_admin::RegisterAdmin;
 use self::home::register_user::RegisterUser;
@@ -96,10 +98,14 @@ pub enum AdminRoutes {
 pub enum UserRoutes {
     #[at("/users")]
     UsersList,
+    #[at("/users/add")]
+    MemberAdd,
     #[at("/users/register")]
     UserRegister,
     #[at("/users/view/:id")]
     UserView { id: i64 },
+    #[at("/users/edit/:id")]
+    EditImage { id: i64 },
     #[not_found]
     #[at("/users/404")]
     NotFound,
@@ -190,6 +196,20 @@ fn switch_user(route: UserRoutes) -> Html {
             <SideLayout>
                 <div class="h-screen overflow-y-scroll">
                     <RegisterUser />
+                </div>
+            </SideLayout>
+        },
+        UserRoutes::MemberAdd => html! {
+            <SideLayout>
+                <div class="h-screen overflow-y-scroll">
+                    <MemberAdd />
+                </div>
+            </SideLayout>
+        },
+        UserRoutes::EditImage { id } => html! {
+            <SideLayout>
+                <div class="h-screen overflow-y-scroll">
+                    <EditImage user_id={ id }/>
                 </div>
             </SideLayout>
         },

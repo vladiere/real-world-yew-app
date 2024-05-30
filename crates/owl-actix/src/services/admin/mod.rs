@@ -64,6 +64,7 @@ pub struct AdminsInfo {
     pub username: String,
     pub date_enrolled: String,
     pub status: String,
+    pub user_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -92,6 +93,7 @@ pub struct OneAdminInfo {
     pub username: String,
     pub date_enrolled: String,
     pub status: String,
+    pub user_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
@@ -139,6 +141,7 @@ pub struct DeviceForSelect {
     pub device_state: String,
     pub created_at: String,
     pub modified_at: String,
+    pub device_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -157,6 +160,7 @@ pub struct DeviceForSelectOne {
     pub device_state: String,
     pub created_at: String,
     pub modified_at: String,
+    pub device_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -252,6 +256,7 @@ impl FromRow<'_, MySqlRow> for DeviceForSelectOne {
             device_state: row.try_get(4)?,
             created_at: row.try_get(5)?,
             modified_at: row.try_get(6)?,
+            device_id: row.try_get(7)?,
         })
     }
 }
@@ -266,6 +271,7 @@ impl FromRow<'_, MySqlRow> for DeviceForSelect {
             device_state: row.try_get(4)?,
             created_at: row.try_get(5)?,
             modified_at: row.try_get(6)?,
+            device_id: row.try_get(7)?,
         })
     }
 }
@@ -284,6 +290,7 @@ impl FromRow<'_, MySqlRow> for OneAdminInfo {
             username: row.try_get(8)?,
             date_enrolled: row.try_get(9)?,
             status: row.try_get(10)?,
+            user_id: row.try_get(11)?,
         })
     }
 }
@@ -315,6 +322,7 @@ impl FromRow<'_, MySqlRow> for AdminsInfo {
             username: row.try_get(5)?,
             date_enrolled: row.try_get(6)?,
             status: row.try_get(7)?,
+            user_id: row.try_get(8)?,
         })
     }
 }

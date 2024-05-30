@@ -2,6 +2,7 @@
 
 pub mod alerts;
 pub mod confirm_modal;
+pub mod edit_modal;
 pub mod home;
 pub mod home_view;
 pub mod list_errors;

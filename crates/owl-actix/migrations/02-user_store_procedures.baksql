@@ -13,13 +13,14 @@
 --   in p_username varchar(255),
 --   in p_password varchar(255),
 --   in p_pass_salt varchar(255),
---   in p_token_salt varchar(255)
+--   in p_token_salt varchar(255),
+--   in p_id varchar(255)
 -- )
 -- begin
 --   declare v_id int;
 --
 --   if (select count(*) from user_login where username = p_username) = 0 then
---     insert into user_info (firstname, middlename, lastname, email_address, recent_address, civil_status, gender, occupation) values (p_firstname,p_middlename,p_lastname, p_email, p_recent_address, p_civil_status, p_gender, p_occupation);
+--     insert into user_info (firstname, middlename, lastname, email_address, recent_address, civil_status, gender, occupation, user_id) values (p_firstname,p_middlename,p_lastname, p_email, p_recent_address, p_civil_status, p_gender, p_occupation, p_id);
 --
 --     set v_id = last_insert_ID();
 --
@@ -44,15 +45,17 @@
 --   in p_occupation varchar(255),
 --   in p_tower varchar(255),
 --   in p_room varchar(255),
---   in p_package enum('Standard','Vip','Vvip','Business','Family','Romance','Extended','Inclusive')
+--   in p_package enum('Standard','Vip','Vvip','Business','Family','Romance','Extended','Inclusive'),
+--   in p_id varchar(255),
+--   in p_building_id varchar(255)
 -- )
 -- begin 
 --   declare v_id int;
 --   if (select count(*) from user_info where email_address = p_email) = 0 then
---     insert into user_info (role_user,firstname, middlename, lastname, email_address, recent_address, civil_status, gender, occupation) values ('User', p_firstname,p_middlename,p_lastname, p_email, p_recent_address, p_civil_status, p_gender, p_occupation);
+--     insert into user_info (role_user,firstname, middlename, lastname, email_address, recent_address, civil_status, gender, occupation, user_id) values ('User', p_firstname,p_middlename,p_lastname, p_email, p_recent_address, p_civil_status, p_gender, p_occupation, p_id);
 --     set v_id = last_insert_id();
 --
---     insert into building (user_id,tower,room,package) values (v_id,p_tower,p_room,p_package);
+--     insert into building (user_id,tower,room,package, building_id) values (v_id,p_tower,p_room,p_package, p_building_id);
 --     select 'Successfully registered' as message;
 --   else
 --     select 'Account already exists' as message;

@@ -17,8 +17,8 @@ pub fn monitoring_table(props: &Props) -> Html {
                 <tr>
                     <th scope="col" class="px-6 py-3">{ "CID#" }</th>
                     <th scope="col" class="px-6 py-3">{ "Fullname" }</th>
-                    <th scope="col" class="px-6 py-3">{ "Building Tower" }</th>
-                    <th scope="col" class="px-6 py-3">{ "Building Room" }</th>
+                    <th scope="col" class="px-6 py-3">{ "Building" }</th>
+                    <th scope="col" class="px-6 py-3">{ "Unit" }</th>
                     <th scope="col" class="px-6 py-3">{ "Status" }</th>
                     <th scope="col" class="px-6 py-3">{ "Date Begin" }</th>
                     <th scope="col" class="px-6 py-3">{ "Date Modified" }</th>

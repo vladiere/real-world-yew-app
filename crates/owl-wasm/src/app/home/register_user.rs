@@ -207,11 +207,11 @@ pub fn register_user() -> Html {
                             <input type="text" id="recent_address" class="outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter user recent address" required=true oninput={oninput_recent_address} value={user_info.recent_address.clone()} />
                         </div>
                         <div>
-                            <label for="tower" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "Tower" }</label>
+                            <label for="tower" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "Building" }</label>
                             <input type="text" id="tower" class="outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter tower for user" required=true oninput={oninput_tower} value={user_info.tower.clone()} />
                         </div>
                         <div>
-                            <label for="room" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "Room" }</label>
+                            <label for="room" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ "Unit" }</label>
                             <input type="text" id="room" class="outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter room for user" required=true oninput={oninput_room} value={user_info.room.clone()} />
                         </div>
                         <div>

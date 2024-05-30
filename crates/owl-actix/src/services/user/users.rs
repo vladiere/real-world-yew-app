@@ -6,6 +6,7 @@ use actix_web::{
 use tracing::debug;
 
 use crate::{
+    b32_hex,
     user::{AccountRegisterInfoWrapper, MemberInfoWrapper},
     AppState, ErrorStatus, QueryReturnMessage,
 };
@@ -17,7 +18,7 @@ pub async fn register_user(
 ) -> impl Responder {
     debug!("{:<12} - register_user", "HANDLER");
 
-    let query = "call register_user(?,?,?,?,?,?,?,?,?,?,?)";
+    let query = "call register_user(?,?,?,?,?,?,?,?,?,?,?,?,?)";
     let acc: AccountRegisterInfoWrapper = body.into_inner();
 
     match sqlx::query(query)
@@ -32,6 +33,14 @@ pub async fn register_user(
         .bind(acc.account.tower)
         .bind(acc.account.room)
         .bind(acc.account.package)
+        .bind(match b32_hex() {
+            Ok(val) => val,
+            Err(_) => String::from("Null"),
+        })
+        .bind(match b32_hex() {
+            Ok(val) => val,
+            Err(_) => String::from("Null"),
+        })
         .execute(&state.db)
         .await
     {
@@ -81,7 +90,7 @@ pub async fn remove_one_user(state: Data<AppState>, id: Path<i64>) -> impl Respo
 pub async fn add_member(state: Data<AppState>, body: Json<MemberInfoWrapper>) -> impl Responder {
     debug!("{:<12} - add_member", "HANDLER");
 
-    let query = "insert into members_table (firstname,middlename,lastname,age,gender,user_id) values (?,?,?,?,?,?)";
+    let query = "insert into members_table (firstname,middlename,lastname,age,gender,user_id, member_id) values (?,?,?,?,?,?,?)";
     let member: MemberInfoWrapper = body.into_inner();
 
     match sqlx::query(query)
@@ -91,6 +100,10 @@ pub async fn add_member(state: Data<AppState>, body: Json<MemberInfoWrapper>) ->
         .bind(member.member.age)
         .bind(member.member.gender)
         .bind(member.member.user_id)
+        .bind(match b32_hex() {
+            Ok(val) => val,
+            Err(_) => String::from("Null"),
+        })
         .execute(&state.db)
         .await
     {

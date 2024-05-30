@@ -20,7 +20,7 @@ use crate::{
 #[get("/info")]
 pub async fn get_admin_info(state: Data<AppState>, ctx: AdminContext) -> impl Responder {
     let id = ctx.id;
-    let query = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt from admin_info_details where id = ?";
+    let query = "select id, firstname, middlename, lastname, email_address, username, role_user, token_salt, user_id from admin_info_details where id = ?";
 
     let jwt_secret: Hmac<Sha256> =
         Hmac::new_from_slice(server_config().JWT_SECRET.as_bytes()).unwrap();
@@ -66,7 +66,7 @@ pub async fn get_admin_info(state: Data<AppState>, ctx: AdminContext) -> impl Re
 
 #[get("/{id}")]
 pub async fn get_one_admin(state: Data<AppState>, id: Path<i64>) -> impl Responder {
-    let query = "select firstname, middlename, lastname, email_address, gender, recent_address, civil_status, occupation, username, date_enrolled, status from admin_info_details where id = ? and role_user = 'Admin'";
+    let query = "select firstname, middlename, lastname, email_address, gender, recent_address, civil_status, occupation, username, date_enrolled, status, user_id from admin_info_details where id = ? and role_user = 'Admin'";
 
     debug!("{:<12} - get_one_admin", "HANDLER");
 
@@ -92,7 +92,7 @@ pub async fn get_one_admin(state: Data<AppState>, id: Path<i64>) -> impl Respond
 
 #[get("/all")]
 pub async fn get_all_admin(state: Data<AppState>, ctx: AdminContext) -> impl Responder {
-    let query = "select id, firstname, middlename, lastname, email_address, username, date_enrolled, status from admin_info_details where id != ? and role_user = 'Admin' and status != 'Removed'";
+    let query = "select id, firstname, middlename, lastname, email_address, username, date_enrolled, status, user_id from admin_info_details where id != ? and role_user = 'Admin' and status != 'Removed'";
 
     debug!("{:<12} - get_all_admin", "HANDLER");
 

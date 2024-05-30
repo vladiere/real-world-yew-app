@@ -45,6 +45,7 @@ pub struct AccountsInfo {
     pub package: String,
     pub date_enrolled: String,
     pub status: String,
+    pub user_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -68,6 +69,7 @@ pub struct OneAccountInfo {
     pub room: String,
     pub package: String,
     pub date_enrolled: String,
+    pub user_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -85,6 +87,7 @@ pub struct MemberInfo {
     pub gender: String,
     pub age: i64,
     pub user_id: i64,
+    pub member_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -103,6 +106,7 @@ pub struct AllMembersInfo {
     pub age: i32,
     pub gender: String,
     pub date_enrolled: String,
+    pub member_id: String,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
@@ -121,6 +125,7 @@ impl FromRow<'_, MySqlRow> for AllMembersInfo {
             age: row.try_get(4)?,
             gender: row.try_get(5)?,
             date_enrolled: row.try_get(6)?,
+            member_id: row.try_get(7)?,
         })
     }
 }
@@ -140,6 +145,7 @@ impl FromRow<'_, MySqlRow> for OneAccountInfo {
             room: row.try_get(9)?,
             package: row.try_get(10)?,
             date_enrolled: row.try_get(11)?,
+            user_id: row.try_get(12)?,
         })
     }
 }
@@ -158,6 +164,7 @@ impl FromRow<'_, MySqlRow> for AccountsInfo {
             package: row.try_get(8)?,
             date_enrolled: row.try_get(9)?,
             status: row.try_get(10)?,
+            user_id: row.try_get(11)?,
         })
     }
 }

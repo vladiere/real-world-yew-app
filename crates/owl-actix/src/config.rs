@@ -23,7 +23,7 @@ pub struct ServerConfig {
 }
 
 impl ServerConfig {
-    fn load_from_env() -> crate::envs::Result<ServerConfig> {
+    fn load_from_env() -> crate::error::Result<ServerConfig> {
         Ok(ServerConfig {
             JWT_SECRET: get_env("JWT_SECRET")?,
             DB_URL: get_env("SERVICE_DB_URL")?,

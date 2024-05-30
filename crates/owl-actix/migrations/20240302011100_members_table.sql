@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS members_table;
 
 CREATE TABLE members_table (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  member_id VARCHAR(255) UNIQUE,
+
   user_id INT NOT NULL,
   firstname VARCHAR(255) NOT NULL,
   middlename VARCHAR(255) NOT NULL,

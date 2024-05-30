@@ -25,6 +25,7 @@ pub struct DeviceForSelect {
     pub device_state: String,
     pub created_at: String,
     pub modified_at: String,
+    pub device_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Default)]
@@ -56,6 +57,7 @@ pub struct DeviceForSelectOne {
     pub device_state: String,
     pub created_at: String,
     pub modified_at: String,
+    pub device_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

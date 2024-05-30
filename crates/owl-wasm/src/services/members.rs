@@ -1,6 +1,6 @@
 use crate::{error::Error, types::*};
 
-use super::{request_delete, request_get};
+use super::{request_delete, request_get, request_post};
 
 pub async fn user_members(id: i64) -> Result<AllMembersInfoWrapper, Error> {
     request_get::<AllMembersInfoWrapper>(format!("/admin/user/member/all/{}", id)).await

@@ -2,6 +2,7 @@
 
 create table device_info (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  device_id varchar(255) unique,
 
   device_name varchar(128) unique not null,
   device_tower varchar(128) not null,

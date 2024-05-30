@@ -5,7 +5,7 @@ use actix_web::{
 };
 use tracing::debug;
 
-use crate::{AppState, ErrorStatus, QueryReturnMessage};
+use crate::{b32_hex, AppState, ErrorStatus, QueryReturnMessage};
 
 use super::{
     DeviceForCreateWrapper, DeviceForSelect, DeviceForSelectOne, DeviceForSelectOneWrapper,
@@ -19,7 +19,7 @@ pub async fn create_device(
 ) -> impl Responder {
     debug!("{:<12} - create_device", "HANDLER");
 
-    let query = "insert into device_info (device_name,device_tower,device_room,device_state) values (?,?,?,?)";
+    let query = "insert into device_info (device_name,device_tower,device_room,device_state,device_id) values (?,?,?,?,?)";
 
     let device: DeviceForCreateWrapper = body.into_inner();
 
@@ -28,6 +28,10 @@ pub async fn create_device(
         .bind(device.device.device_tower)
         .bind(device.device.device_room)
         .bind(device.device.device_state)
+        .bind(match b32_hex() {
+            Ok(val) => val,
+            Err(_) => String::from("Null"),
+        })
         .execute(&state.db)
         .await
     {
@@ -51,7 +55,7 @@ pub async fn create_device(
 pub async fn select_one_device(state: Data<AppState>, id: Path<i64>) -> impl Responder {
     debug!("{:<12} - select_one_device", "HANDLER");
 
-    let query = "select id, device_name, device_tower, device_room, device_state, date_format(ctime, '%M %e, %Y') as created_at, date_format(mtime, '%M %e, %Y') as modified_at from device_info where id = ?";
+    let query = "select id, device_name, device_tower, device_room, device_state, date_format(ctime, '%M %e, %Y') as created_at, date_format(mtime, '%M %e, %Y') as modified_at, device_id from device_info where id = ?";
 
     match sqlx::query_as::<_, DeviceForSelectOne>(query)
         .bind(*id)
@@ -76,7 +80,7 @@ pub async fn select_one_device(state: Data<AppState>, id: Path<i64>) -> impl Res
 pub async fn select_devices(state: Data<AppState>) -> impl Responder {
     debug!("{:<12} - select_devices", "HANDLER");
 
-    let query = "select id, device_name, device_tower, device_room, device_state, date_format(ctime, '%M %e, %Y') as created_at, date_format(mtime, '%M %e, %Y') as modified_at from device_info where device_state != 'Removed' order by ctime asc";
+    let query = "select id, device_name, device_tower, device_room, device_state, date_format(ctime, '%M %e, %Y') as created_at, date_format(mtime, '%M %e, %Y') as modified_at, device_id from device_info where device_state != 'Removed' order by ctime asc";
 
     match sqlx::query_as::<_, DeviceForSelect>(query)
         .fetch_all(&state.db)

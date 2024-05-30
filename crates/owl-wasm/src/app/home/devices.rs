@@ -49,6 +49,7 @@ pub fn devices_page() -> Html {
                     <Icon icon_id={IconId::BootstrapNodePlusFill} width={"24px".to_owned()} height={"24px".to_owned()}/>
                     { "Add new Device" }
                 </Link<DeviceRoutes>>
+
                 {
                     if let Some(device) = &devices.data {
                         html! {
