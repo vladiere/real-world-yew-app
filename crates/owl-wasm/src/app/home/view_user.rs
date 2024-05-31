@@ -69,7 +69,7 @@ pub fn view_user(props: &Props) -> Html {
 
     if let Some(user) = &one_user.data {
         html! {
-            <div class="h-full w-full flex flex-col gap-10">
+            <div class="h-full w-full flex flex-col gap-10 p-8">
                 <SuccessAlert alert_msg={(*message).clone()} />
                 <h1 class="text-2xl font-bold">{ "Client Information details" }</h1>
                 <div class="grid gap-5 md:grid-cols-3">
@@ -127,7 +127,7 @@ pub fn view_user(props: &Props) -> Html {
                         }
                     }
                 </div>
-                <div class="flex flex-wrap gap-5 items-center justify-center">
+                <div class="flex flex-wrap gap-5 items-center justify-center pb-10">
                     {
                         if !(*is_not_empty).clone() {
                             if let Some(members) = &user_members.data {

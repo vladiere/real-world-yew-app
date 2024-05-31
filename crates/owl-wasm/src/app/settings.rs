@@ -119,7 +119,7 @@ pub fn settings() -> Html {
     };
 
     html! {
-        <div class="flex flex-col w-full h-full">
+        <div class="flex flex-col w-full h-full p-8">
             <DangerAlert error={admin_update.error.clone()} />
             <SuccessAlert alert_msg={(*message).clone()} />
             <div class="flex flex-col mb-5">

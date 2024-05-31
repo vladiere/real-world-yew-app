@@ -28,7 +28,7 @@ pub fn monitoring_page() -> Html {
 
     if let Some(data) = &req_monitors.data {
         html! {
-            <div class="flex flex-col gap-5">
+            <div class="flex flex-col gap-5 p-8">
                 <div class="flex items-center justify-between">
                     <h1 class="text-2xl font-bold">{ "Real time monitoring" }</h1>
                     <SearchMonitorComponent search_monitor={data.clone()} callback={search_callback.clone()}/>

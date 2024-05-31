@@ -80,7 +80,7 @@ pub fn device_info(props: &Props) -> Html {
             <>
                 <SuccessAlert alert_msg={(*message).clone()} />
                 <DangerAlert error={update.error.clone()} />
-                <div class="overflow-y-auto overflow-x-hidden flex justify-center items-center w-full md:inset-0 h-screen max-h-full">
+                <div class="overflow-y-auto overflow-x-hidden flex justify-center items-center w-full md:inset-0 h-screen max-h-full p-8">
                     <div class="relative p-4 w-full max-w-2xl max-h-full absolute">
                         // <!-- Modal content -->
                         <div class="relative rounded-lg shadow-lg bg-transparent">

@@ -115,18 +115,14 @@ fn switch_main(route: AppRoutes) -> Html {
     match route {
         AppRoutes::Home => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <DashboardPage />
-                </div>
+                <DashboardPage />
             </SideLayout>
         },
         AppRoutes::Login => html! { <Login /> },
         AppRoutes::ForgotPassword => html! { <ForgotPassword /> },
         AppRoutes::Monitoring => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <MonitoringPage />
-                </div>
+                <MonitoringPage />
             </SideLayout>
         },
         AppRoutes::Devices | AppRoutes::DevicesRoot => {
@@ -140,9 +136,7 @@ fn switch_main(route: AppRoutes) -> Html {
         }
         AppRoutes::Settings => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <SettingsPage />
-                </div>
+                <SettingsPage />
             </SideLayout>
         },
         AppRoutes::NotFound => html! { <NotFound /> },
@@ -153,23 +147,17 @@ fn switch_device(route: DeviceRoutes) -> Html {
     match route {
         DeviceRoutes::DevicesList => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <DevicesPage />
-                </div>
+                <DevicesPage />
             </SideLayout>
         },
         DeviceRoutes::DeviceRegister => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <DeviceAdd />
-                </div>
+                <DeviceAdd />
             </SideLayout>
         },
         DeviceRoutes::DevicesInfo { id } => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <DeviceInfo device_id={id} />
-                </div>
+                <DeviceInfo device_id={id} />
             </SideLayout>
         },
         DeviceRoutes::NotFound => html! { <Redirect<AppRoutes> to={AppRoutes::NotFound} /> },
@@ -180,37 +168,27 @@ fn switch_user(route: UserRoutes) -> Html {
     match route {
         UserRoutes::UsersList => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <UsersPage />
-                </div>
+                <UsersPage />
             </SideLayout>
         },
         UserRoutes::UserView { id } => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <ViewUser user_id={id}/>
-                </div>
+                <ViewUser user_id={id}/>
             </SideLayout>
         },
         UserRoutes::UserRegister => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <RegisterUser />
-                </div>
+                <RegisterUser />
             </SideLayout>
         },
         UserRoutes::MemberAdd => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <MemberAdd />
-                </div>
+                <MemberAdd />
             </SideLayout>
         },
         UserRoutes::EditImage { id } => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <EditImage user_id={ id }/>
-                </div>
+                <EditImage user_id={ id }/>
             </SideLayout>
         },
         UserRoutes::NotFound => html! { <Redirect<AppRoutes> to={AppRoutes::NotFound} /> },
@@ -221,23 +199,17 @@ fn switch_admin(route: AdminRoutes) -> Html {
     match route {
         AdminRoutes::AdminsList => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <AdminsPage />
-                </div>
+                <AdminsPage />
             </SideLayout>
         },
         AdminRoutes::AdminView { id } => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <ViewAdmin admin_id={id}/>
-                </div>
+                <ViewAdmin admin_id={id}/>
             </SideLayout>
         },
         AdminRoutes::AdminRegister => html! {
             <SideLayout>
-                <div class="h-screen overflow-y-scroll">
-                    <RegisterAdmin />
-                </div>
+                <RegisterAdmin />
             </SideLayout>
         },
         AdminRoutes::NotFound => html! { <Redirect<AppRoutes> to={AppRoutes::NotFound} /> },

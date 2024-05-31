@@ -175,7 +175,7 @@ pub fn registration_admin() -> Html {
     };
 
     html! {
-        <div class="flex flex-col gap-5">
+        <div class="flex flex-col gap-5 p-8">
             <DangerAlert error={admin_register.error.clone()} />
             <SuccessAlert alert_msg={(*message).clone()} />
             <h1 class="text-2xl font-bold">{ "Admin Registration" }</h1>

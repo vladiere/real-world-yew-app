@@ -125,7 +125,7 @@ pub fn side_layout(props: &Props) -> Html {
                     </li>
                 </ul>
             </div>
-            <div class="p-8 w-full overflow-y-scroll h-[calc(100vh-1rem)]">
+            <div class="w-full grow overflow-y-scroll h-full">
                 { for props.children.iter() }
             </div>
         </div>

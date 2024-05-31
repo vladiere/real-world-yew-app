@@ -42,7 +42,7 @@ pub fn devices_page() -> Html {
     };
 
     html! {
-        <div class="flex flex-col gap-5">
+        <div class="flex flex-col gap-5 p-8">
             <h1 class="text-2xl font-bold">{ "Devices List" }</h1>
             <div class="flex flex-row gap-10 justify-between">
                 <Link<DeviceRoutes> to={DeviceRoutes::DeviceRegister} classes="flex items-center gap-2 middle none center mr-4 rounded-lg bg-green-500 py-3 px-5 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">

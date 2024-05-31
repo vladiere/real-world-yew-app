@@ -162,7 +162,7 @@ pub fn register_user() -> Html {
         <>
             <SuccessAlert alert_msg={(*message).clone()} />
             <DangerAlert error={request_register.error.clone()} />
-            <div class="flex flex-col gap-5">
+            <div class="grow overflow-y-scroll flex flex-col gap-5 h-full p-8">
                 <h1 class="text-2xl font-bold">{ "User Registration" }</h1>
                 <form {onsubmit} >
                     <div class="grid gap-6 mb-6 md:grid-cols-2">

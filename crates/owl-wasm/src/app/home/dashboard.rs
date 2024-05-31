@@ -21,7 +21,7 @@ pub fn dashboard_page() -> Html {
 
     if let Some(counts) = &dashboard_counts.data {
         html! {
-            <div class="flex flex-col w-full h-full dark:bg-gray-800 dark:text-gray-200">
+            <div class="flex flex-col w-full h-full dark:bg-gray-800 dark:text-gray-200 p-8">
                 <div class="flex flex-col mb-5">
                     <h1 class="text-2xl font-bold">{ "Dashboard" }</h1>
                     <div class="flex font-medium text-6md gap-2">

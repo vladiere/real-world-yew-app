@@ -96,7 +96,7 @@ pub fn view_admin(props: &Props) -> Html {
 
     if let Some(admin) = &one_admin.data {
         html! {
-            <div class="flex flex-col gap-5">
+            <div class="flex flex-col gap-5 p-8">
                 <SuccessAlert alert_msg={(*message).clone()} />
                 <DangerAlert error={on_update.error.clone()} />
                 <h1 class="text-2xl font-bold">{ "Admin information details" }</h1>
