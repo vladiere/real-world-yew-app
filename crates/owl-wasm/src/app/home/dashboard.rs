@@ -102,12 +102,12 @@ pub fn dashboard_page() -> Html {
                                         <Icon icon_id={IconId::LucideMonitor} width={"28px".to_owned()} height={"28px".to_owned()} />
                                     </div>
                                 </div>
-                                <Link<AppRoutes> to={AppRoutes::Monitoring} classes="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] dark:hover:text-blue-600 hover:text-blue-500 cursor-pointer">
+                                <a href="http://localhost/monitor/Monitoring.php" class="w-full flex flex-row justify-between items-center bg-slate-500 dark:bg-slate-800 px-6 rounded-b-lg py-[3px] dark:hover:text-blue-600 hover:text-blue-500 cursor-pointer">
                                     <p class="text-4md">
                                         { "View realtime monitoring" }
                                     </p>
                                     <Icon icon_id={IconId::BootstrapArrowRightCircle} width={"18px".to_owned()} height={"18px".to_owned()}/>
-                                </Link<AppRoutes>>
+                                </a>
                             </div>
                         </div>
                     </div>

@@ -12,6 +12,7 @@ CREATE OR REPLACE TABLE members_table (
   lastname VARCHAR(255) NOT NULL,
   age INT(11) NOT NULL,
   gender ENUM('Male', 'Female'),
+  status ENUM('Active','Removed', 'Inactive'),
   ctime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   mtime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
