@@ -2,7 +2,7 @@
 
 DROP TABLE IF EXISTS members_table;
 
-CREATE TABLE members_table (
+CREATE OR REPLACE TABLE members_table (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   member_id VARCHAR(255) UNIQUE,
 

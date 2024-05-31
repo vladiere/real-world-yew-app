@@ -1,6 +1,6 @@
 -- Add migration script here
 
-create table user_images (
+create or replace table user_images (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
   user_id BIGINT not null,

@@ -1,6 +1,6 @@
 -- Add migration script here
 
-create table device_info (
+create or replace table device_info (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   device_id varchar(255) unique,
 

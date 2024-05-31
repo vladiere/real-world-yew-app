@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS refresh_token;
 DROP TABLE IF EXISTS feedbacks;
 
 -- Create user_info table
-CREATE TABLE user_info (
+CREATE OR REPLACE TABLE user_info (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   user_id VARCHAR(255) UNIQUE,
 
@@ -38,7 +38,7 @@ CREATE TABLE user_info (
 );
 
 -- Create user_login table
-CREATE TABLE user_login (
+CREATE OR REPLACE TABLE user_login (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT NOT NULL,
   username VARCHAR(255) NOT NULL UNIQUE,
@@ -50,7 +50,7 @@ CREATE TABLE user_login (
 );
 
 -- Create building table
-CREATE TABLE building (
+CREATE OR REPLACE TABLE building (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   building_id VARCHAR(255) UNIQUE,
   user_id BIGINT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE building (
 );
 
 -- Create refresh_token table
-CREATE TABLE refresh_token (
+CREATE OR REPLACE TABLE refresh_token (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
   refresh_token VARCHAR(255) NOT NULL,

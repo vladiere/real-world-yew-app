@@ -1,6 +1,6 @@
 -- Add migration script here
 
-create table monitoring_table (
+create or replace table monitoring_table (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
   client_name varchar(128) not null,
