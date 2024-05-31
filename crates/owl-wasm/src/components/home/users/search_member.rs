@@ -45,6 +45,10 @@ pub fn search_member_component(props: &Props) -> Html {
                                 .to_lowercase()
                                 .contains(&query.to_lowercase())
                             || admin.gender.to_lowercase().contains(&query.to_lowercase())
+                            || admin
+                                .member_id
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
                     })
                     .cloned()
                     .collect(),

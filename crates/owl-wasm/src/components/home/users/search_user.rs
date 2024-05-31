@@ -53,6 +53,7 @@ pub fn search_user_component(props: &Props) -> Html {
                             || admin.tower.to_lowercase().contains(&query.to_lowercase())
                             || admin.room.to_lowercase().contains(&query.to_lowercase())
                             || admin.package.to_lowercase().contains(&query.to_lowercase())
+                            || admin.user_id.to_lowercase().contains(&query.to_lowercase())
                     })
                     .cloned()
                     .collect(),

@@ -83,7 +83,7 @@ pub fn device_info(props: &Props) -> Html {
                 <div class="overflow-y-auto overflow-x-hidden flex justify-center items-center w-full md:inset-0 h-screen max-h-full">
                     <div class="relative p-4 w-full max-w-2xl max-h-full absolute">
                         // <!-- Modal content -->
-                        <div class="relative rounded-lg shadow bg-transparent">
+                        <div class="relative rounded-lg shadow-lg bg-transparent">
                             // <!-- Modal header -->
                             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-200">
                                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -92,9 +92,15 @@ pub fn device_info(props: &Props) -> Html {
                             </div>
                             // <!-- Modal body -->
                             <div class="p-4 md:p-5 space-y-4 relative">
-                                <button class="bg-transparent outline-none absolute top-2 right-5" onclick={enable_input.clone()}>
-                                    <Icon class="stroke-green-500" icon_id={IconId::FeatherEdit} width={"24px".to_owned()} height={"24px".to_owned()}/>
-                                </button>
+                                <div class="grid grid-cols-2 gap-5 items-center">
+                                    <div class="flex gap-2 items-center">
+                                        <span class="font-semibold text-4md">{ "ID:" }</span>
+                                        <span class="font-bold text-4md">{ data.device.device_id.clone() }</span>
+                                    </div>
+                                    <button class="bg-transparent outline-none absolute top-2 right-5" onclick={enable_input.clone()}>
+                                        <Icon class="stroke-green-500" icon_id={IconId::FeatherEdit} width={"24px".to_owned()} height={"24px".to_owned()}/>
+                                    </button>
+                                </div>
                                 <div class="grid grid-cols-2 gap-5">
                                     <div class="flex flex-col">
                                         <p class="text-4md text-bold text-gray-400 capitalize">{ "Device Name" }</p>

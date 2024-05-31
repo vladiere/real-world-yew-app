@@ -43,6 +43,10 @@ pub fn search_component(props: &Props) -> Html {
                                 .device_state
                                 .to_lowercase()
                                 .contains(&query.to_lowercase())
+                            || device
+                                .device_id
+                                .to_lowercase()
+                                .contains(&query.to_lowercase())
                     })
                     .cloned()
                     .collect(),

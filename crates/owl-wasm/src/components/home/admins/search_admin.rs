@@ -49,6 +49,7 @@ pub fn search_component(props: &Props) -> Html {
                                 .to_lowercase()
                                 .contains(&query.to_lowercase())
                             || admin.status.to_lowercase().contains(&query.to_lowercase())
+                            || admin.user_id.to_lowercase().contains(&query.to_lowercase())
                             || admin
                                 .date_enrolled
                                 .to_lowercase()
