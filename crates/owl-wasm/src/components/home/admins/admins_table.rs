@@ -19,7 +19,7 @@ pub fn admins_table(props: &Props) -> Html {
         <table class="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
             <thead class="border-b dark:border-0 text-xs text-gray-700 uppercase bg-neutral-400 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">{ "CID#" }</th>
+                    <th scope="col" class="px-6 py-3">{ "ID" }</th>
                     <th scope="col" class="px-6 py-3">{ "Fullname" }</th>
                     <th scope="col" class="px-6 py-3">{ "Username" }</th>
                     <th scope="col" class="px-6 py-3">{ "Email address" }</th>

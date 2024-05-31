@@ -74,7 +74,7 @@ pub fn view_user(props: &Props) -> Html {
                 <h1 class="text-2xl font-bold">{ "Client Information details" }</h1>
                 <div class="grid gap-5 md:grid-cols-3">
                     <div class="flex flex-col items-center justify-center gap-5">
-                        <img src="https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?t=st=1709475853~exp=1709479453~hmac=c828619b151f43e33085076888676a6c564fe5b88e4a20baba5b94f2be13766d&w=740" alt="admin" class="rounded-lg h-52" />
+                        <img src="public/images/owl-logo.png" alt="admin" class="rounded-lg h-52" />
                         <div>
                             <DeleteUserButton user_id={id.clone()} callback={delete_callback.clone()} />
                         </div>
